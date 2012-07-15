@@ -1,0 +1,107 @@
+body, td {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 14px;
+}
+
+h1 {
+	font-size: 24px;
+	font-weight: bold;
+	text-align: center;
+	color: #FF0000;
+}
+
+h2 {
+	font-size: 18px;
+	font-weight: bold;
+	color: #808080;
+}
+
+p, blockquote, pre, ul, ol, dl, fieldset, table {
+	margin: .5em 0 1em;
+}
+
+ul {
+	padding-left: 0px;
+}
+
+pre,code {
+	font: 14px Consolas, Monaco, "Lucida Console", monospace;
+}
+
+pre {
+	background: #eee;
+	overflow: auto;
+	padding: 1%;
+}
+
+blockquote {
+	border-left: 10px solid #EAEAEA;
+	padding-left: 10px;
+}
+
+
+.moderatoren, .friends, .groups, .profiles {
+	list-style: disc !important;
+}
+
+.moderatoren li, .friends li, .groups li, .profiles li {
+	border: none !important;
+	padding: 0 0 !important;
+	margin-left: 20px !important;
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+.threads, .messages {
+	clear: both;
+	list-style: none;
+	margin-left: 0;
+}
+
+.threads li, .messages li {
+	border: 1px solid #ccc;
+	padding: 0.5% 0.5%;
+	margin: 10px 0 0 0;
+}
+
+.boards {
+	clear: both;
+	list-style: none;
+	margin-left: 0;
+}
+
+.boards li {
+	border: 1px solid #ccc;
+	padding: 1% 1%;
+	margin: 10px 0 0 0;
+}
+
+.posts {
+	clear: both;
+	list-style: none;
+	margin-left: 0;
+}
+
+.posts li {
+	border: 1px solid #ccc;
+	padding: 0 0;
+	margin: 10px 0 0 0;
+}
+
+.posts .author {
+	padding: 1%;
+	padding-bottom: 0.5%;
+}
+
+.posts .content {
+	padding: 1%;
+	padding-top: 0.5%;
+}
+
+.error {
+	color: #FF0000;
+}
+
+.servererror {
+	background-color: #FF0000;
+}
