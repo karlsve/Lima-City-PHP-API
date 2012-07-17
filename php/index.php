@@ -23,8 +23,8 @@ $xml->appendChild($xslt);
 
 $user = null;
 
-if(isset($_GET['sid'])) {
-	$sid = $_GET['sid'];
+if(isset($_REQUEST['sid'])) {
+	$sid = $_REQUEST['sid'];
 	$root = $xml->createElementNS($namespace, 'lima');
 
 	$goto = '';
