@@ -3,7 +3,7 @@
 function getUser($xml, $sid, $username, $exclude = array()) {
 	global $url_profile;
 
-	$doc = phpQuery::newDocument(get_request_cookie($url_profile . '/' . urlencode($username), 'sid=' . $sid));
+	$doc = phpQuery::newDocument(get_request_cookie($url_profile . '/' . urlencode($username) . '/page%3A0/perpage%3A100', "sid=$sid"));
 	$doc->find('script')->remove();
 
 	$user = $xml->createElement('user');
