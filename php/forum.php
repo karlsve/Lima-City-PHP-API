@@ -237,6 +237,13 @@ function parseContent($xml, $doc) {
 
 		return($result);
 	}
+	if($doc->tagName == 'iframe') {
+		$src = $doc->attributes->getNamedItem('src')->value;
+		$result = $xml->createElement('youtube', $src);
+
+		return($result);
+	}
+
 
 	$result = $xml->createElement($doc->tagName);
 	if($doc->hasChildNodes()) {
@@ -260,6 +267,7 @@ function parsePostContent($xml, $content) {
 	$content = preg_replace('/<pre class="brush: ([a-zA-Z]*?)">(.*?)<\\/pre>/is', '<code language="\\1">\\2</code>', $content);
 	$content = preg_replace('/<img ([^>]*?)>/is', '<img \\1 />', $content);
 	$content = str_replace('<br>', '<br />', $content);
+	$content = str_replace('allowfullscreen></iframe>', 'allowfullscreen="allowfullscreen"></iframe>', $content);
 
 	$doc = new DOMDocument('1.0', 'utf-8');
 	$doc->loadXML("<content>$content</content>");

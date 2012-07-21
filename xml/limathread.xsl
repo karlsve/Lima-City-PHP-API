@@ -107,9 +107,14 @@
 		</a>
 	</xsl:template>
 
+	<xsl:template match="lima:youtube">
+		<iframe width="400" height="257" src="{.}" frameborder="0"></iframe>
+	</xsl:template>
+
 	<xsl:template match="lima:goto">
 		<a href="?sid={$sid}&amp;action=goto&amp;type={@type}&amp;id={@id}">
 			<xsl:apply-templates />
 		</a>
 	</xsl:template>
+
 </xsl:stylesheet>
