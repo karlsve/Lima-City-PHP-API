@@ -117,6 +117,7 @@ $xhtml = str_replace('<?xml version="1.0"?>', $doctype, $xhtml);
 $xhtml = preg_replace('|<script ([^>]*?)/>|is', '<script \\1></script>', $xhtml);
 $xhtml = preg_replace('|<textarea ([^>]*?)/>|is', '<textarea \\1></textarea>', $xhtml);
 $xhtml = preg_replace('|<div ([^>]*?)/>|is', '<div \\1></div>', $xhtml);
+$xhtml = preg_replace('|<iframe ([^>]*?)/>|is', '<iframe \\1></iframe>', $xhtml);
 $xhtml = str_replace('<div/>', '<div></div>', $xhtml);
 
 echo($xhtml);
