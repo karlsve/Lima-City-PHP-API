@@ -42,6 +42,7 @@
 				<title><xsl:text>Forum</xsl:text></title>
 				<link rel="stylesheet" type="text/css" href="/xml/lima.css" />
 				<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+				<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=1" />
 				<xsl:if test="/lima:lima/lima:session and /lima:lima/lima:errorcode">
 					<meta http-equiv="refresh" content="0; url=?sid={$sid}" />
 				</xsl:if>
