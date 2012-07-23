@@ -23,9 +23,16 @@ $xml->appendChild($xslt);
 
 $user = null;
 
-if(isset($_REQUEST['sid'])) {
-	$sid = $_REQUEST['sid'];
+if(isset($_REQUEST['sid']) || isset($_COOKIE['sid'])) {
+	$sid = NULL;
+
+	if(isset($_COOKIE['sid']))
+		$sid = $_COOKIE['sid'];
+	if(isset($_REQUEST['sid']))
+		$sid = $_REQUEST['sid'];
+
 	$root = $xml->createElementNS($namespace, 'lima');
+	$root->appendChild($xml->createElement('usecookie', isset($_COOKIE['sid']) ? 'true' : 'false'));
 
 	$goto = '';
 
@@ -41,6 +48,8 @@ if(isset($_REQUEST['sid'])) {
 			switch($_REQUEST['action']) {
 				case 'logout':
 					logout($sid);
+					if(isset($_COOKIE['sid']))
+						setcookie('sid', NULL, -1);
 					header('location: .');
 					exit();
 					break;
@@ -76,10 +85,8 @@ if(isset($_REQUEST['sid'])) {
 					$goto = "location: ?sid=$sid&action=thread&name={$_REQUEST['name']}"; 
 					break;
 				case 'homepage':
-					//header('content-type: text/plain; charset=utf-8');
 					$homepage = getHomepage($xml, $sid);
 					$root->appendChild($homepage['threads']);
-					//exit();
 					break;
 			}
 		} else {
@@ -124,10 +131,10 @@ if(isset($_REQUEST['sid'])) {
 		$root->appendChild($status);
 
 		if($result != false) {
+			//setcookie('sid', $result, 0);
 			header('location: ?sid=' . urlencode($result));
-			$session = $xml->createElement('session');
-			$sid = $xml->createTextNode($result);
-			$session->appendChild($sid);
+			//header('location: .');
+			$session = $xml->createElement('session', $result);
 			$root->appendChild($session);
 		}
 

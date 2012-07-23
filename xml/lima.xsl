@@ -23,6 +23,7 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<xsl:include href="limaicons.xsl" />
 	<xsl:include href="limalogin.xsl" />
 	<xsl:include href="limaactions.xsl" />
 	<xsl:include href="limastatus.xsl" />
@@ -94,4 +95,5 @@
 	<xsl:template match="/lima:lima/lima:session" />
 	<xsl:template match="/lima:lima/lima:loggedin" />
 	<xsl:template match="/lima:lima/lima:username" />
+	<xsl:template match="/lima:lima/lima:usecookie" />
 </xsl:stylesheet>

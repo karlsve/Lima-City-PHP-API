@@ -24,6 +24,18 @@
 						<xsl:value-of select="lima:forum" />
 						<xsl:text>, </xsl:text>
 						<xsl:value-of select="lima:date" />
+						<xsl:if test="lima:flags/@important = 'true' or lima:flags/@fixed = 'true' or lima:flags/@closed = 'true'">
+							<xsl:text>, </xsl:text>
+						</xsl:if>
+						<xsl:if test="lima:flags/@important = 'true'">
+							<img src="{$icon_important}" alt="important" />
+						</xsl:if>
+						<xsl:if test="lima:flags/@fixed = 'true'">
+							<img src="{$icon_fixed}" alt="fixed" />
+						</xsl:if>
+						<xsl:if test="lima:flags/@closed = 'true'">
+							<img src="{$icon_closed}" alt="closed" />
+						</xsl:if>
 						<xsl:text>)</xsl:text>
 					</li>
 				</xsl:for-each>
@@ -44,6 +56,18 @@
 						<xsl:value-of select="lima:forum" />
 						<xsl:text>, </xsl:text>
 						<xsl:value-of select="lima:date" />
+						<xsl:if test="lima:flags/@important = 'true' or lima:flags/@fixed = 'true' or lima:flags/@closed = 'true'">
+							<xsl:text>, </xsl:text>
+						</xsl:if>
+						<xsl:if test="lima:flags/@important = 'true'">
+							<img src="{$icon_important}" alt="important" />
+						</xsl:if>
+						<xsl:if test="lima:flags/@fixed = 'true'">
+							<img src="{$icon_fixed}" alt="fixed" />
+						</xsl:if>
+						<xsl:if test="lima:flags/@closed = 'true'">
+							<img src="{$icon_closed}" alt="closed" />
+						</xsl:if>
 						<xsl:text>)</xsl:text>
 					</li>
 				</xsl:for-each>

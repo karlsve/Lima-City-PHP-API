@@ -117,6 +117,12 @@ function getThread($xml, $sid, $url) {
 	$posts = $postlist->find('li:has(.author)');
 	$thread = $xml->createElement('thread');
 
+	$writable = false;
+	foreach($doc->find('ul.actions li img[src="/images/layout/icons/page_add.png"]') as $img) {
+		$writable = true;
+	}
+	$thread->appendChild($xml->createElement('writable', $writable ? 'true' : 'false'));
+
 	$name = $doc->find('h2')->contents();
 	$threadname = $xml->createElement('name');
 	$threadname->appendChild($xml->createTextNode($name));

@@ -63,8 +63,38 @@ function getHomepageThreads($xml, $doc) {
 			$url = substr($threadlink->attr('href'), 8);
 			$date = $entry->find('small')->html();
 			$board = $entry->find('a[href^="/board/"]:not([href^="/board/action:jump/"])')->html();
+			$closed = false;
+			$fixed = false;
+			$important = false;
+			foreach($entry->find('ul.badges img') as $img) {
+				$alt = pq($img)->attr('alt');
+				switch($alt) {
+					case 'geschlossen':
+						$closed = true;
+						break;
+					case 'fixiert':
+						$fixed = true;
+						break;
+					case 'wichtig':
+						$important = true;
+						break;
+				}
+			}
 
 			$thread = $xml->createElement('thread');
+
+			$flags = $xml->createElement('flags');
+			$xmlimportant = $xml->createAttribute('important');
+			$xmlimportant->appendChild($xml->createTextNode($important ? 'true' : 'false'));
+			$xmlfixed = $xml->createAttribute('fixed');
+			$xmlfixed->appendChild($xml->createTextNode($fixed ? 'true' : 'false'));
+			$xmlclosed = $xml->createAttribute('closed');
+			$xmlclosed->appendChild($xml->createTextNode($closed ? 'true' : 'false'));
+			$flags->appendChild($xmlimportant);
+			$flags->appendChild($xmlfixed);
+			$flags->appendChild($xmlclosed);
+			$thread->appendChild($flags);
+
 			$thread->appendChild($xml->createElement('name', $name));
 			$thread->appendChild($xml->createElement('url', $url));
 			$thread->appendChild($xml->createElement('date', $date));

@@ -10,6 +10,10 @@
 		<h2>
 			<xsl:text>Thread: </xsl:text>
 			<i><xsl:value-of select="lima:name" /></i>
+			<xsl:if test="lima:writable = 'false'">
+				<xsl:text>&#x20;</xsl:text>
+				<img src="{$icon_closed}" alt="closed" />
+			</xsl:if>
 		</h2>
 		<ul class="posts">
 			<xsl:for-each select="lima:post">
@@ -29,9 +33,16 @@
 				</li>
 			</xsl:for-each>
 		</ul>
-		<xsl:call-template name="postform">
-			<xsl:with-param name="name" select="lima:url" />
-		</xsl:call-template>
+		<xsl:choose>
+			<xsl:when test="lima:writable = 'true'">
+				<xsl:call-template name="postform">
+					<xsl:with-param name="name" select="lima:url" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<img src="{$icon_closed}" alt="closed" />
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="lima:thread/lima:name" />

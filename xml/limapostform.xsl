@@ -43,7 +43,7 @@
 				<input type="hidden" name="quotes" value="" />
 			</div>
 			<div>
-				<textarea id="textfield" name="text" onkeyup="doformat();" rows="10" cols="30"></textarea>
+				<textarea id="textfield" name="text" onkeyup="doformat();" rows="10"></textarea>
 			</div>
 			<script type="text/javascript"><![CDATA[
 				document.getElementById('textfield').focus();
@@ -54,9 +54,7 @@
 			</div>
 		</form>
 		<script type="text/javascript"><![CDATA[
-			document.onload = function() {
-				doformat();
-			}
+			doformat();
 		// ]]></script>
 	</xsl:template>
 </xsl:stylesheet>
