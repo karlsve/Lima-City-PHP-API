@@ -13,6 +13,9 @@ $namespace = 'http://www.lima-city.de/xml/';
 $qualifiedname = 'lima-city';
 //$doctype = $dom->createDocumentType($qualifiedname, '', $dtd);
 
+if(isset($_REQUEST['style']))
+	$xsl = htmlspecialchars($_REQUEST['style']);
+
 $xml = new DOMDocument('1.0', 'utf-8');
 //$xml = $dom->createDocument('', '', $doctype);
 $xml->preserveWhiteSpace = false;
