@@ -7,7 +7,8 @@
 
 	<xsl:template match="/lima:lima/lima:thread">
 		<h2>
-			<xsl:text>Thread: </xsl:text>
+			<xsl:value-of select="$text_thread" />
+			<xsl:text>: </xsl:text>
 			<i><xsl:value-of select="lima:name" /></i>
 			<xsl:if test="lima:writable = 'false'">
 				<xsl:text>&#x20;</xsl:text>
@@ -122,7 +123,7 @@
 	</xsl:template>
 
 	<xsl:template match="lima:goto">
-		<a href="?sid={$sid}&amp;action=goto&amp;type={@type}&amp;id={@id}">
+		<a href="?action=goto&amp;type={@type}&amp;id={@id}">
 			<xsl:apply-templates />
 		</a>
 	</xsl:template>

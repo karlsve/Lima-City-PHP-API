@@ -6,31 +6,34 @@
 	xmlns="http://www.w3.org/1999/xhtml">
 
 	<xsl:template match="/lima:lima/lima:messages">
-		<h2><xsl:text>Nachrichten</xsl:text></h2>
+		<h2><xsl:value-of select="$text_messages" /></h2>
 		<ul class="messages">
-			<xsl:apply-templates />
+			<xsl:for-each select="lima:message">
+				<li>
+					<xsl:text>&#xBB;</xsl:text>
+					<a href="?action=message&amp;id={lima:title/@id}">
+						<xsl:value-of select="lima:title" />
+					</a>
+					<xsl:text>&#xAB;</xsl:text>
+					<br />
+					<xsl:value-of select="$text_date" />
+					<xsl:text>: </xsl:text>
+					<xsl:value-of select="lima:date" />
+					<br />
+					<xsl:value-of select="$text_from" />
+					<xsl:text>: </xsl:text>
+					<a href="?action=profile&amp;user={lima:from}">
+						<xsl:value-of select="lima:from" />
+					</a>
+				</li>
+			</xsl:for-each>
 		</ul>
 	</xsl:template>
 
-	<xsl:template match="lima:messages/lima:message">
-		<li>
-			<xsl:text>&#xBB;</xsl:text>
-			<a href="?sid={$sid}&amp;action=message&amp;id={lima:title/@id}">
-				<xsl:value-of select="lima:title" />
-			</a>
-			<xsl:text>&#xAB;</xsl:text>
-			<br />
-			<xsl:text>Datum: </xsl:text>
-			<xsl:value-of select="lima:date" />
-			<br />
-			<xsl:text>Von: </xsl:text>
-			<a href="?sid={$sid}&amp;action=profile&amp;user={lima:from}">
-				<xsl:value-of select="lima:from" />
-			</a>
-		</li>
-	</xsl:template>
-
 	<xsl:template match="lima:lima/lima:message">
+		<p>
+			<a href="?action=messages"><xsl:value-of select="$text_messages" /></a>
+		</p>
 		<h2>
 			<xsl:text>PN: </xsl:text>
 			<i>
@@ -38,11 +41,13 @@
 			</i>
 		</h2>
 		<div>
-			<xsl:text>Datum: </xsl:text>
+			<xsl:value-of select="$text_date" />
+			<xsl:text>: </xsl:text>
 			<xsl:value-of select="lima:date" />
 			<br />
-			<xsl:text>Von: </xsl:text>
-			<a href="?sid={$sid}&amp;action=profile&amp;user={lima:from}">
+			<xsl:value-of select="$text_from" />
+			<xsl:text>: </xsl:text>
+			<a href="?action=profile&amp;user={lima:from}">
 				<xsl:value-of select="lima:from" />
 			</a>
 		</div>

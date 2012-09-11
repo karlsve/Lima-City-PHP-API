@@ -63,6 +63,8 @@ function getHomepageThreads($xml, $doc) {
 			$url = substr($threadlink->attr('href'), 8);
 			$date = $entry->find('small')->html();
 			$board = $entry->find('a[href^="/board/"]:not([href^="/board/action:jump/"])')->html();
+			$boardurl = substr($entry->find('a[href^="/board/"]:not([href^="/board/action:jump/"])')->attr('href'), 7);
+			$user = $entry->find('a[href^="/profile/"]')->html();
 			$closed = false;
 			$fixed = false;
 			$important = false;
@@ -95,10 +97,18 @@ function getHomepageThreads($xml, $doc) {
 			$flags->appendChild($xmlclosed);
 			$thread->appendChild($flags);
 
+
+			$forum = $xml->createElement('forum', $board);
+			$forumurl = $xml->createAttribute('url');
+			$forumurl->appendChild($xml->createTextNode($boardurl));
+			$forum->appendChild($forumurl);
+
 			$thread->appendChild($xml->createElement('name', $name));
 			$thread->appendChild($xml->createElement('url', $url));
 			$thread->appendChild($xml->createElement('date', $date));
-			$thread->appendChild($xml->createElement('forum', $board));
+			$thread->appendChild($forum);
+			$thread->appendChild($xml->createElement('forumurl', $boardurl));
+			$thread->appendChild($xml->createElement('user', $user));
 			$node->appendChild($thread);
 		}
 

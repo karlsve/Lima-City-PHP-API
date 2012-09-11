@@ -15,14 +15,15 @@
 				<xsl:value-of select="$name" />
 			</xsl:when>
 			<xsl:otherwise>
-				<a href="?sid={$sid}&amp;action=profile&amp;user={$name}">
+				<a href="?action=profile&amp;user={$name}">
 					<xsl:value-of select="$name" />
 				</a>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:include href="limaicons.xsl" />
+	<xsl:include href="limatranslation.xsl" />
+	<xsl:include href="limaresources.xsl" />
 	<xsl:include href="limalogin.xsl" />
 	<xsl:include href="limaactions.xsl" />
 	<xsl:include href="limastatus.xsl" />
@@ -39,7 +40,7 @@
 	<xsl:template match="/">
 		<html>
 			<head>
-				<title><xsl:text>Forum</xsl:text></title>
+				<title><xsl:value-of select="$text_title" /></title>
 				<link rel="stylesheet" type="text/css" href="/xml/lima.css" />
 				<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=1" />
@@ -49,23 +50,28 @@
 			</head>
 			<body>
 				<h1><xsl:text>Lima-City</xsl:text></h1>
+				<xsl:if test="/lima:lima/lima:loggedin = 'yes'">
+					<p>
+						<xsl:value-of select="$text_username" /><xsl:text>: </xsl:text><xsl:value-of select="/lima:lima/lima:username" /><br />
+						<a href="."><xsl:value-of select="$text_actions" /></a><xsl:text>, </xsl:text>
+						<a href="?action=homepage"><xsl:value-of select="$text_home" /></a><xsl:text>, </xsl:text>
+						<a href="?action=logout"><xsl:value-of select="$text_logout" /></a>
+					</p>
+				</xsl:if>
 				<hr />
 				<xsl:apply-templates />
-				<xsl:if test="/lima:lima/lima:session and /lima:lima/lima:errorcode">
-					<a href="?sid={$sid}"><xsl:text>continue</xsl:text></a>
-				</xsl:if>
 				<xsl:choose>
 					<xsl:when test="/lima:lima/lima:loggedin = 'no'">
 						<xsl:call-template name="loginform" />
 					</xsl:when>
 					<xsl:otherwise>
+						<hr />
 						<p>
-							<xsl:text>Username: </xsl:text><xsl:value-of select="/lima:lima/lima:username" /><br />
-							<a href="?sid={$sid}">home</a>
+							<xsl:value-of select="$text_username" /><xsl:text>: </xsl:text><xsl:value-of select="/lima:lima/lima:username" /><br />
+							<a href="."><xsl:value-of select="$text_actions" /></a><xsl:text>, </xsl:text>
+							<a href="?action=homepage"><xsl:value-of select="$text_home" /></a><xsl:text>, </xsl:text>
+							<a href="?action=logout"><xsl:value-of select="$text_logout" /></a>
 						</p>
-						<form action="index.php?sid={$sid}" method="post">
-							<div><input type="submit" name="action" value="logout" /></div>
-						</form>
 					</xsl:otherwise>
 				</xsl:choose>
 			</body>

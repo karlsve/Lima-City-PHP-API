@@ -7,30 +7,29 @@
 
 	<xsl:template match="lima:board[lima:thread]">
 		<h2>
-			<xsl:text>Board: </xsl:text>
+			<xsl:value-of select="$text_board" /><xsl:text>: </xsl:text>
 			<i><xsl:value-of select="@name" /></i>
 		</h2>
 		<ul class="threads">
-			<xsl:apply-templates />
+			<xsl:for-each select="lima:thread">
+				<li>
+					<a href="?action=thread&amp;name={lima:url}">
+						<xsl:value-of select="lima:name" />
+					</a>
+					<xsl:text> (</xsl:text>
+					<xsl:call-template name="username">
+						<xsl:with-param name="name" select="lima:author" />
+						<xsl:with-param name="deleted" select="lima:author/@deleted" />
+					</xsl:call-template>
+					<xsl:text>, </xsl:text>
+					<xsl:value-of select="lima:date" />
+					<xsl:text>)</xsl:text>
+					<br />
+					<xsl:value-of select="lima:views" /><xsl:text> Ansichten, </xsl:text>
+					<xsl:value-of select="lima:replies" /><xsl:text> Antworten</xsl:text>
+				</li>
+			</xsl:for-each>
 		</ul>
 	</xsl:template>
 
-	<xsl:template match="lima:board/lima:thread">
-		<li>
-			<a href="?sid={$sid}&amp;action=thread&amp;name={lima:url}">
-				<xsl:value-of select="lima:name" />
-			</a>
-			<xsl:text> (</xsl:text>
-			<xsl:call-template name="username">
-				<xsl:with-param name="name" select="lima:author" />
-				<xsl:with-param name="deleted" select="lima:author/@deleted" />
-			</xsl:call-template>
-			<xsl:text>, </xsl:text>
-			<xsl:value-of select="lima:date" />
-			<xsl:text>)</xsl:text>
-			<br />
-			<xsl:value-of select="lima:views" /><xsl:text> Ansichten, </xsl:text>
-			<xsl:value-of select="lima:replies" /><xsl:text> Antworten</xsl:text>
-		</li>
-	</xsl:template>
 </xsl:stylesheet>

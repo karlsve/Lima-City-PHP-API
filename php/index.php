@@ -34,8 +34,10 @@ if(isset($_REQUEST['sid']) || isset($_COOKIE['sid'])) {
 	if(isset($_REQUEST['sid']))
 		$sid = $_REQUEST['sid'];
 
+	$usecookie = isset($_COOKIE['sid']);
+
 	$root = $xml->createElementNS($namespace, 'lima');
-	$root->appendChild($xml->createElement('usecookie', isset($_COOKIE['sid']) ? 'true' : 'false'));
+	$root->appendChild($xml->createElement('usecookie', $usecookie)) ? 'true' : 'false';
 
 	$goto = '';
 
@@ -85,7 +87,7 @@ if(isset($_REQUEST['sid']) || isset($_COOKIE['sid'])) {
 					break;
 				case 'post':
 					$root->appendChild(postInThread($xml, $sid, $_REQUEST['name'], $_REQUEST['text'], $_REQUEST['quotes']));
-					$goto = "location: ?sid=$sid&action=thread&name={$_REQUEST['name']}"; 
+					$goto = $usecookie ? "location: ?action=thread&name={$_REQUEST['name']}" : "location: ?sid=$sid&action=thread&name={$_REQUEST['name']}";
 					break;
 				case 'homepage':
 					$homepage = getHomepage($xml, $sid);
@@ -108,6 +110,11 @@ if(isset($_REQUEST['sid']) || isset($_COOKIE['sid'])) {
 		$username = $xml->createElement('username', $user);
 		$root->appendChild($username);
 
+	} else {
+		if(isset($_COOKIE['sid']))
+			setcookie('sid', NULL, -1);
+		header('location: .');
+		exit();
 	}
 
 	$loggedin = $xml->createElement('loggedin');
@@ -134,9 +141,11 @@ if(isset($_REQUEST['sid']) || isset($_COOKIE['sid'])) {
 		$root->appendChild($status);
 
 		if($result != false) {
-			//setcookie('sid', $result, 0);
-			header('location: ?sid=' . urlencode($result));
-			//header('location: .');
+			if(isset($_REQUEST['usecookie']) && ($_REQUEST['usecookie'] == 'true')) {
+				setcookie('sid', $result, 0);
+				header('location: .');
+			} else
+				header('location: ?sid=' . urlencode($result));
 			$session = $xml->createElement('session', $result);
 			$root->appendChild($session);
 		}
