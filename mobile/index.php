@@ -47,7 +47,7 @@ foreach($requestheaders as $name => $value) {
 }
 
 $curl = curl_init($url);
-curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
 curl_setopt($curl, CURLOPT_BINARYTRANSFER, true);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER , true);
 curl_setopt($curl, CURLOPT_REFERER, $url);
