@@ -1,0 +1,71 @@
+body {
+	font: 75%/ 1.5em Helvetica, Arial, sans-serif;
+	background-color: black;
+	color: #ccc;
+}
+
+blockquote {
+	border-left: 10px solid #EAEAEA;
+	padding-left: 10px;
+	margin: 0;
+}
+
+pre,code {
+	font: 12px Consolas, Monaco, "Lucida Console", monospace;
+}
+
+pre {
+	background: rgba(0, 0, 0, 0.5);
+	padding: 1%;
+	width: 98%;
+}
+
+textarea {
+	background: rgba(0, 0, 0, 0.5);
+	border: 1px solid #333;
+	color: white;
+}
+
+.info p {
+	padding: 0;
+	margin: 5px 0;
+}
+
+.info p:first-child {
+	margin: 0;
+}
+
+.posts {
+	clear: both;
+	list-style: none;
+	margin-left: 0;
+	padding: 0;
+}
+
+.posts > li {
+	padding: 10px;
+	overflow: hidden;
+	height: 1%;
+}
+
+.posts > li:not(:first-child) {
+	margin-top: 5px;
+}
+
+.posts .info {
+	float: left;
+	overflow: hidden;
+	padding: 1%;
+	width: 20%;
+}
+
+.posts .content {
+	float: right;
+	overflow: hidden;
+	padding: 1%;
+	width: 75%;
+}
+
+li.deleted {
+	background: rgba(128, 128, 128, 0.5);
+}

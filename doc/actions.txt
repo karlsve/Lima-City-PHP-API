@@ -1,0 +1,4 @@
+<actions>
+	<action>Supported action</action>
+	...
+</actions>

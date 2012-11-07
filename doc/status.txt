@@ -1,0 +1,7 @@
+action=serverstatus
+
+<serverstatus>
+	<info name="Watch" time="response time" />
+	<info name="lima-city Datenbank" time="30 ms" />
+	...
+</serverstatus>

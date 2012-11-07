@@ -1,0 +1,12 @@
+action=message&id=1234567
+
+<message>
+	<title>Titel der PN</title>
+	<id>1234567</id>
+	<from>sender-username</from>
+	<to>receiver-username</to>
+	<date>17:01, 1.11.2012</date>
+	<content>
+		...
+	</content>
+</message>

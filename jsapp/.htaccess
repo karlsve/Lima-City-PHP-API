@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule ^xmlrpc$ /dev/lima-xml/api [QSA]

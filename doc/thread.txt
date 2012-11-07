@@ -1,0 +1,19 @@
+action=thread&name=titel-des-threads
+
+<thread>
+	<writable>true</writable>
+	<name>Titel des Threads</name>
+	<url>titel-des-threads</url>
+	<posts>
+		<post>
+			<type>normal</type>
+			<date>12:34, 31.10.2012</date>
+			<id>1087640</id>
+			<user deleted="false">postauthor</user>
+			<content>
+				...
+			</content>
+		</post>
+		...
+	</posts>
+</thread>

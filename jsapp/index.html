@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset="utf-8" />
+		<title>lima-city: next generation</title>
+		<link rel="stylesheet" type="text/css" href="css/ui-hexagon/jquery-ui-1.9.1.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/forum.css" />
+		<link rel="stylesheet" type="text/css" href="css/syntax/shCoreEmacs.css" />
+		<script type="text/javascript" src="js/syntax/shCore.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushAppleScript.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushAS3.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushBash.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushColdFusion.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushCpp.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushCSharp.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushCss.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushDelphi.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushDiff.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushErlang.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushGroovy.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushJava.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushJavaFX.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushJScript.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushPerl.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushPhp.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushPlain.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushPython.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushRuby.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushSass.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushScala.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushSql.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushVb.js"></script>
+		<script type="text/javascript" src="js/syntax/shBrushXml.js"></script>
+		<script type="text/javascript" src="js/bbcode.js"></script>
+		<script type="text/javascript" src="js/bbcode-definitions.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.9.1.min.js"></script>
+		<script type="text/javascript" src="js/xmlrpc.js"></script>
+		<script type="text/javascript" src="js/forum.js"></script>
+	</head>
+	<body>
+		<!-- dialogs -->
+		<div id="loginbox" title="Login">
+			<p>Du musst dich einloggen, um dieses System benutzen zu k&uuml;nnen.</p>
+			<form action="#" onsubmit="return false">
+				<div class="table">
+					<div class="tr"><input type="text" id="username" placeholder="Username" /></div>
+					<div class="tr"><input type="password" id="password" placeholder="Passwort" /></div>
+				</div>
+			</form>
+			<p>
+				Hinweis: wenn du noch keinen Account hast musst du dich zuerst
+				<a href="https://www.lima-city.de/homepage/ref:250835">hier</a>
+				registrieren.
+			</p>
+		</div>
+		<!-- infos / warnings / errors -->
+		<div id="passworderror" class="ui-widget">
+			<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+				<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+				<strong>Fehler:</strong> Dein Benutzername / Passwort stimmt nicht!</p>
+			</div>
+		</div>
+		<!-- ui -->
+		<div id="main">
+			<div id="buttons">
+				<button id="logout">Logout</button>
+				<button id="webspace">Webspace</button>
+				<button id="update">Aktualisieren</button>
+			</div>
+			<div id="tabs">
+				<ul>
+					<li><a href="#tab-homepage"><span>Homepage</span></a></li>
+					<li><a href="#tab-boards"><span>Forum</span></a></li>
+					<li><a href="#tab-thread"><span>Thread</span></a></li>
+					<li><a href="#tab-messages"><span>Nachrichten</span></a></li>
+					<li><a href="#tab-usercp"><span>Verwaltung</span></a></li>
+					<li><a href="#tab-chat"><span>Chat</span></a></li>
+					<li><a href="#tab-status"><span>Server-Status</span></a></li>
+				</ul>
+				<div id="tab-homepage">
+					<h2>Neueste Beitr&auml;ge</h2>
+					<ul id="newest"></ul>
+				</div>
+				<div id="tab-boards">
+					<h2>Foren</h2>
+					<ul id="boards"></ul>
+				</div>
+				<div id="tab-thread">
+					<h2>Thread: <span id="thread-title"></span></h2>
+					<ul id="thread-content" class="posts"></ul>
+					<button id="thread-write-enable">Schreiben</button>
+					<div id="thread-write">
+						<h3>Vorschau</h3>
+						<div>
+							<p id="thread-preview-text"></p>
+							<p id="thread-preview-chars"></p>
+						</div>
+						<h3>Editor</h3>
+						<div>
+							<textarea id="thread-write-content" style="width: 99%" rows="16" wrap="vitrual"></textarea>
+						</div>
+						<div>
+							<button class="cancel">Abbrechen</button>
+							<button class="save">Ver&ouml;ffentlichen</button>
+						</div>
+					</div>
+				</div>
+				<div id="tab-messages">
+					<h2>Private Nachrichten</h2>
+					<ul id="messages"></ul>
+				</div>
+				<div id="tab-usercp"></div>
+				<div id="tab-chat"></div>
+				<div id="tab-status">
+					<p>Hier siehst du sofort wenn ein Server ausf&auml;llt oder langsam ist.</p>
+					<div id="status"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

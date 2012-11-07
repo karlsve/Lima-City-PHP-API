@@ -1,0 +1,21 @@
+action=forumlist
+
+<forum>
+	<board>
+		<name>Name des Forums</name>
+		<url>name-des-forums</url>
+		<description>Was in dem Forum alles drin steht</description>
+		<moderatoren>
+			<moderator>wer</moderator>
+		</moderatoren>
+		<topics>2</topics>
+		<answers>10</answers>
+		<newestThread>
+			<url>neuester-thread</url>
+			<title>Neuester Thread</title>
+			<author>benutzername</author>
+			<date>14:26, 15.9.2012</date>
+		</newestThread>
+	</board>
+	...
+</forum>

@@ -1,0 +1,11 @@
+action=profiles
+
+<profiles>
+	<profile>
+		<name>Benutzername</name>
+		<gulden>12345</gulden>
+		<rang>1</rang>
+		<last-login>12:34, 26.10.2012</last-login>
+	</profile>
+	...
+</profiles>

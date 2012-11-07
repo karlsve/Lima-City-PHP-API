@@ -1,0 +1,21 @@
+action=homepage
+
+<homepage>
+	<newest>
+		<thread>
+			<flags important="false" fixed="false" closed="false" />
+			<name>Titel des Threads</name>
+			<url>titel-des-threads</url>
+			<date>12:34, 31.10.2012</date>
+			<forum url="forumname">Forumname</forum>
+			<user>ersteller</user>
+		</thread>
+	</newest>
+	<noreply>
+		...
+		<thread>
+			...
+		</thread>
+		...
+	</noreply>
+</homepage>
