@@ -20,4 +20,12 @@
 	<xsl:variable name="star_a"><xsl:text>https://www.lima-city.de/images/star_a.png</xsl:text></xsl:variable>
 
 	<xsl:variable name="banner_small"><a href="http://www.lima-city.de/"><img src="http://www.lima-city.de/images/banner/next-level_80x15_1.gif" alt="Gratis werbefreier Webspace | lima-city: kostenloser Webspace" title="Gratis werbefreier Webspace | lima-city: kostenloser Webspace" border="0"/></a></xsl:variable>
+
+	<xsl:variable name="icon_serverchart"><xsl:text>https://www.lima-city.de/images/layout/icons/server_chart.png</xsl:text></xsl:variable>
+	<xsl:variable name="icon_house"><xsl:text>https://www.lima-city.de/images/layout/icons/house.png</xsl:text></xsl:variable>
+	<xsl:variable name="icon_email"><xsl:text>https://www.lima-city.de/images/layout/icons/email.png</xsl:text></xsl:variable>
+	<xsl:variable name="icon_book"><xsl:text>https://www.lima-city.de/images/layout/icons/book.png</xsl:text></xsl:variable>
+	<xsl:variable name="icon_layoutcontent"><xsl:text>https://www.lima-city.de/images/layout/icons/layout_content.png</xsl:text></xsl:variable>
+	<xsl:variable name="icon_online"><xsl:text>https://www.lima-city.de/images/layout/icons/user_online.png</xsl:text></xsl:variable>
+	<xsl:variable name="icon_offline"><xsl:text>https://www.lima-city.de/images/layout/icons/user_offline.png</xsl:text></xsl:variable>
 </xsl:stylesheet>

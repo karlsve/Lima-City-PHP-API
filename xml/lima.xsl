@@ -45,14 +45,15 @@
 				<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=1" />
 				<xsl:if test="/lima:lima/lima:session and /lima:lima/lima:errorcode">
-					<meta http-equiv="refresh" content="0; url=?sid={$sid}" />
+					<meta http-equiv="refresh" content="0; url=." />
 				</xsl:if>
 			</head>
 			<body>
 				<h1><xsl:text>Lima-City</xsl:text></h1>
 				<xsl:if test="/lima:lima/lima:loggedin = 'yes'">
 					<p>
-						<xsl:value-of select="$text_username" /><xsl:text>: </xsl:text><xsl:value-of select="/lima:lima/lima:username" /><br />
+						<xsl:value-of select="$text_username" /><xsl:text>: </xsl:text><xsl:value-of select="/lima:lima/lima:username" />
+						<xsl:text>, </xsl:text><xsl:value-of select="/lima:lima/lima:role" /><br />
 						<a href="."><xsl:value-of select="$text_actions" /></a><xsl:text>, </xsl:text>
 						<a href="?action=homepage"><xsl:value-of select="$text_home" /></a><xsl:text>, </xsl:text>
 						<a href="?action=logout"><xsl:value-of select="$text_logout" /></a>
@@ -67,7 +68,8 @@
 					<xsl:otherwise>
 						<hr />
 						<p>
-							<xsl:value-of select="$text_username" /><xsl:text>: </xsl:text><xsl:value-of select="/lima:lima/lima:username" /><br />
+							<xsl:value-of select="$text_username" /><xsl:text>: </xsl:text><xsl:value-of select="/lima:lima/lima:username" />
+							<xsl:text>, </xsl:text><xsl:value-of select="/lima:lima/lima:role" /><br />
 							<a href="."><xsl:value-of select="$text_actions" /></a><xsl:text>, </xsl:text>
 							<a href="?action=homepage"><xsl:value-of select="$text_home" /></a><xsl:text>, </xsl:text>
 							<a href="?action=logout"><xsl:value-of select="$text_logout" /></a>
@@ -101,4 +103,5 @@
 	<xsl:template match="/lima:lima/lima:loggedin" />
 	<xsl:template match="/lima:lima/lima:username" />
 	<xsl:template match="/lima:lima/lima:usecookie" />
+	<xsl:template match="/lima:lima/lima:role" />
 </xsl:stylesheet>

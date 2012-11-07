@@ -12,6 +12,7 @@
 	<xsl:variable name="text_logout"><xsl:text>Ausloggen</xsl:text></xsl:variable>
 	<xsl:variable name="text_login"><xsl:text>Login</xsl:text></xsl:variable>
 	<xsl:variable name="text_pleaselogin"><xsl:text>Login</xsl:text></xsl:variable>
+	<xsl:variable name="text_role"><xsl:text>Rolle</xsl:text></xsl:variable>
 
 	<xsl:variable name="text_homepage"><xsl:text>Homepage</xsl:text></xsl:variable>
 	<xsl:variable name="text_serverstatus"><xsl:text>Server-Status</xsl:text></xsl:variable>

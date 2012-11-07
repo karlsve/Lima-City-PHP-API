@@ -11,7 +11,7 @@
 			<xsl:for-each select="lima:message">
 				<li>
 					<xsl:text>&#xBB;</xsl:text>
-					<a href="?action=message&amp;id={lima:title/@id}">
+					<a href="?action=message&amp;id={lima:id}">
 						<xsl:value-of select="lima:title" />
 					</a>
 					<xsl:text>&#xAB;</xsl:text>

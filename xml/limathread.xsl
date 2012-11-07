@@ -16,7 +16,7 @@
 			</xsl:if>
 		</h2>
 		<ul class="posts">
-			<xsl:for-each select="lima:post">
+			<xsl:for-each select="lima:posts/lima:post">
 				<li>
 					<div class="author">
 						<xsl:call-template name="username">

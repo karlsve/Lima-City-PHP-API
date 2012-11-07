@@ -10,7 +10,7 @@
 		<ul class="boards">
 			<xsl:for-each select="lima:board">
 				<li>
-					<a href="?action=board&amp;name={lima:name/@url}">
+					<a href="?action=board&amp;name={lima:url}">
 						<xsl:value-of select="lima:name" />
 					</a>
 					<br />
@@ -50,7 +50,7 @@
 					<xsl:text>: </xsl:text>
 					<xsl:choose>
 						<xsl:when test="lima:newestThread/lima:title != ''">
-							<a href="?action=thread&amp;name={lima:newestThread/lima:title/@url}">
+							<a href="?action=thread&amp;name={lima:newestThread/lima:url}">
 								<xsl:value-of select="lima:newestThread/lima:title" />
 							</a>
 							<xsl:text> (</xsl:text>
