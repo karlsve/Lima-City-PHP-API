@@ -1,10 +1,10 @@
 <?php
 
-function lima_login() {
+function lima_login($username, $password) {
 	global $url_login;
 	$post = array(
-		'form_username' => $args->username,
-		'form_password' => $args->password
+		'form_username' => $username,
+		'form_password' => $password
 	);
 	$response = post_request_raw($url_login, $post);
 	$pattern_sid = '|Set-Cookie: sid=(.*?); path=/|i';
