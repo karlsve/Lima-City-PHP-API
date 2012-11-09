@@ -22,6 +22,9 @@ function rpc_getNotifications($xml, $result, $args) {
 			case '/profile/hackyourlife#guestbook':
 				$type = 'guestbook';
 				break;
+			case '/promowall':
+				$type = 'promowall';
+				break;
 		}
 		if($type == 'unknown')
 			continue;
