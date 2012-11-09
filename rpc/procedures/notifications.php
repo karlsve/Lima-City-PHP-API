@@ -19,6 +19,9 @@ function rpc_getNotifications($xml, $result, $args) {
 			case '/messages/box%3A4':
 				$type = 'notification';
 				break;
+			case '/profile/hackyourlife#guestbook':
+				$type = 'guestbook';
+				break;
 		}
 		if($type == 'unknown')
 			continue;
