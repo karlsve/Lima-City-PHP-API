@@ -30,7 +30,7 @@ function rpc_login($xml, $result, $args) {
 		$error = 'error';
 	if($login === 0)
 		$error = 'password';
-	$result->appendChild($xml->createElement('error', $error));
+	$result->appendChild($xml->createElement('result', $error));
 	// session identifier
 	if($error === 'OK')
 		$result->appendChild($xml->createElement('session', $login));
