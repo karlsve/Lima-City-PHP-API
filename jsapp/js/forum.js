@@ -7,62 +7,26 @@ var password = ''; // used for jabber login
 
 var formatter;
 
-var xmlrpc = new XMLRPC(xmlrpcurl, 'lima');
-/* xmlrpc test routines
-
-var xmlrpc = new XMLRPC('../xmlrpc/xmlrpc.php', 'lima');
-
-xmlrpc.call('test', { 'arg1' : 'value1', 'arg2' : 'value2'  }, function(msg) { alert($(msg).text()); });
-xmlrpc.multicall([
-	{
-		'proc' : 'test',
-		'args' : {
-			'arg1' : 'value1',
-			'arg2' : 'value2'
-		},
-		'handler' : function(msg) {
-			alert('call1 gives "' + $(msg).text() + '"');
-		}
-	}, {
-		'proc' : 'test',
-		'args' : {
-			'arg1' : 'abc',
-			'arg2' : 'def'
-		},
-		'handler' : function(msg) {
-			alert('call2 gives "' + $(msg).text() + '"');
-		}
-	}
-]);
-*/
+var xmlrpc = new XMLRPC('../rpc/xmlrpc.php', 'lima');
 
 var login = function(user, pass) {
 	user = user.trim();
 	pass = pass.trim();
 	if(user.length == 0 || pass.length == 0)
 		return;
-	$.ajax({
-		url: xmlrpcurl,
-		type: 'POST',
-		dataType: 'xml',
-		data: {
-			'action' : 'login',
-			'user' : user,
-			'pass' : pass
-		}
-	}).done(function(msg) {
-		var errorcode = $(msg).find('lima > errorcode').text();
+	xmlrpc.call('login', { 'username' : user, 'password' : pass }, function(msg) {
+		var errorcode = $(msg).find('errorcode').text();
 		if(errorcode == 'passwd') {
 			$('#passworderror').show();
 			return;
 		}
 		$('#passworderror').hide();
-		var loggedin = $(msg).find('lima > loggedin').text();
-		if(loggedin == 'no') {
+		var error = $(msg).find('result').text();
+		if(error != 'OK') {
 			sid = false;
 			return;
 		}
-		sid = $(msg).find('lima > session').text();
+		sid = $(msg).find('session').text();
 		username = user;
 		password = pass;
 		saveSession();
@@ -78,16 +42,9 @@ var loginfunction = function() {
 };
 
 var logout = function() {
-	$.ajax({
-		url: xmlrpcurl,
-		type: 'POST',
-		data: {
-			'action' : 'logout',
-			'sid' : sid
-		}
-	}).done(function(msg) {
-		var loggedin = $(msg).find('lima > loggedin').text();
-		if(loggedin != 'no') {
+	xmlrpc.call('logout', { 'sid' : sid }, function(msg) {
+		var error = $(msg).find('fail').length;
+		if(error != 0) {
 			alert('Es ist ein schwerer Fehler aufgetreten!');
 			return;
 		}
@@ -219,29 +176,25 @@ var showThread = function(url) {
 	$('#thread-write-enable').hide();
 	$('#thread-title').text('Lade...');
 	$('#thread-content').empty();
-	$.ajax({
-		url: xmlrpcurl,
-		type: 'POST',
-		data: {
-			action : 'thread',
-			name : url,
-			sid : sid
-		}
-	}).done(function(msg) {
-		var title = $(msg).find('lima > thread > name').text();
-		var writable = $(msg).find('lima > thread > writable').text();
+	xmlrpc.call('getThread', { 'sid' : sid, 'url' : url }, function(msg) {
+		var notloggedin = $(msg).find('notloggedin').length != 0;
+		if(notloggedin)
+			return;
+		var title = $(msg).find('name').text();
+		var writable = $(msg).find('writable').text();
 		// reset input text area
 		$('#thread-write-content').val('');
 		$('#thread-title').text(title);
 		$('#thread-write').hide();
 		writable ? $('#thread-write-enable').show() : $('#thread-write-enable').hide();
-		$(msg).find('lima > thread > posts > post').each(function(index) {
+		$(msg).find('posts > post').each(function(index) {
 			var type = $(this).find('type').text();
 			var date = $(this).find('date').text();
 			var id = $(this).find('id').text();
 			var userdata = $(this).find('user');
 			var user = userdata.text();
 			var userdeleted = userdata.attr('deleted');
+			var author = userdata.attr('author');
 			var avatar = userdata.attr('avatar');
 			var gulden = userdata.attr('gulden');
 			var rank = userdata.attr('rank');
@@ -257,6 +210,8 @@ var showThread = function(url) {
 			data.push($('<p class="username">').append(userinfo));
 			data.push($('<p class="date">').text(date));
 			data.push($('<p class="limalink"><a href="https://www.lima-city.de/board/action%3Ajump/' + id + '" target="_blank">@lima-city</a></p>'));
+			if(author == 'true')
+				data.push($('<p class="author">Author dieses Themas</p>'));
 			if(userdeleted == 'false') {
 				if(avatar != '')
 					data.push($('<p class="avatar">').append($('<img>').attr('src', 'https://www.lima-city.de/images/avatar/' + avatar)));
@@ -289,16 +244,12 @@ var loadHomescreen = function(update) {
 		$('#newest').append($('<li>Lade...</li>'));
 		$('#newest').menu('refresh');
 	}
-	$.ajax({
-		url: xmlrpcurl,
-		type: 'POST',
-		data: {
-			'action' : 'homepage',
-			'sid': sid
-		}
-	}).done(function(msg) {
+	xmlrpc.call('getHomepage', { 'sid' : sid }, function(msg) {
+		var notloggedin = $(msg).find('notloggedin').length != 0;
+		if(notloggedin)
+			return;
 		$('#newest').empty();
-		$(msg).find('lima > homepage > newest > thread').each(function(index) {
+		$(msg).find('newest > thread').each(function(index) {
 			var important = $(this).find('flags').attr('important');
 			var fixed = $(this).find('flags').attr('fixed');
 			var closed = $(this).find('flags').attr('closed');
@@ -365,25 +316,22 @@ var loadBoards = function(update) {
 		$('#boards').append($('<li>Lade...</li>'));
 		$('#boards').menu('refresh');
 	}
-	$.ajax({
-		url: xmlrpcurl,
-		type: 'POST',
-		data: {
-			'action' : 'forumlist',
-			'sid': sid
-		}
-	}).done(function(msg) {
+	xmlrpc.call('getBoards', { 'sid' : sid }, function(msg) {
+		var notloggedin = $(msg).find('notloggedin').length != 0;
+		if(notloggedin)
+			return;
 		$('#boards').empty();
-		$(msg).find('lima > forum > board').each(function(index) {
+		$(msg).find('board').each(function(index) {
 			var name = $(this).find('name').text();
 			var url = $(this).find('url').text();
 			var description = $(this).find('description').text();
 			var topics = $(this).find('topics').text();
-			var replies = $(this).find('answers').text();
-			var newest_title = $(this).find('newestThread').find('title').text();
-			var newest_author = $(this).find('newestThread').find('author').text();
-			var newest_date = $(this).find('newestThread').find('date').text();
-			var newest_url = $(this).find('newestThread').find('url').text();
+			var replies = $(this).find('replies').text();
+			var newest_thread = $(this).find('newest-thread');
+			var newest_title = newest_thread.find('title').text();
+			var newest_author = newest_thread.find('author').text();
+			var newest_date = newest_thread.find('date').text();
+			var newest_url = newest_thread.find('url').text();
 
 			var tooltip = description + '<br />' +
 				'Themen: ' + topics + '<br />' +
@@ -403,24 +351,23 @@ var loadMessages = function(update) {
 		$('#messages').append($('<li>Lade...</li>'));
 		$('#messages').menu('refresh');
 	}
-	$.ajax({
-		url: xmlrpcurl,
-		type: 'POST',
-		data: {
-			'action' : 'messages',
-			'sid': sid
-		}
-	}).done(function(msg) {
+	xmlrpc.call('getMessages', { 'sid' : sid }, function(msg) {
+		var notloggedin = $(msg).find('notloggedin').length != 0;
+		if(notloggedin)
+			return;
 		$('#messages').empty();
-		$(msg).find('lima > messages > message').each(function(index) {
+		$(msg).find('message').each(function(index) {
 			var id = $(this).find('id').text();
 			var title = $(this).find('title').text();
 			var date = $(this).find('date').text();
 			var from = $(this).find('from').text();
+			var unread = $(this).find('unread').text();
 
 			var tooltip = 'Von: ' + from + '<br />' +
 				'Datum: ' + date + '<br />' +
 				'Nachrichten-ID: ' + id;
+			if(unread == 'true')
+				tooltip += '<br />Ungelesen';
 
 			var node = $('<a href="#" onclick="return false">').text(title);
 			$('#messages').append($('<li title="message">').append(node).tooltip({ content : tooltip }));
@@ -434,16 +381,9 @@ var loadStatus = function(update) {
 		$('#status').empty();
 		$('#status').append($('<div>Lade...</div>'));
 	}
-	$.ajax({
-		url: xmlrpcurl,
-		type: 'POST',
-		data: {
-			action : 'serverstatus',
-			sid : sid
-		}
-	}).done(function(msg) {
+	xmlrpc.call('getServerStatus', null, function(msg) {
 		$('#status').empty();
-		$(msg).find('lima > serverstatus > info').each(function(index) {
+		$(msg).find('info').each(function(index) {
 			var name = $(this).attr('name');
 			var time = $(this).attr('time');
 			var online = time != '';
