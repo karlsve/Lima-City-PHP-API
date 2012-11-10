@@ -69,3 +69,45 @@ textarea {
 li.deleted {
 	background: rgba(128, 128, 128, 0.5);
 }
+
+div.table {
+	display: table;
+}
+
+div.table div.tr {
+	display: table-row;
+}
+
+div.table div.td {
+	display: table-cell;
+}
+
+#top {
+	background-color: black;
+	position: fixed;
+	top: 0;
+	height: 55px;
+	width: 100%;
+	z-index: 1000;
+}
+
+#top > * {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-right: 1%;
+	height: 100%;
+}
+
+#tabs {
+	margin-top: 60px;
+}
+
+#buttons {
+	float: left;
+	overflow: hidden;
+}
+
+#infobox {
+	float: right;
+	overflow: hidden;
+}

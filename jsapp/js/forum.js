@@ -61,6 +61,9 @@ var updater = function() {
 			return;
 		doUpdate();
 	}, 60000 * 2); // 2 min
+	setInterval(function() {
+		$('#currenttime').text(getDate());
+	}, 2000);
 };
 
 var doUpdate = function() {
@@ -347,33 +350,59 @@ var loadBoards = function(update) {
 
 var loadMessages = function(update) {
 	if(!update) {
+		$('#mailboxes').empty();
+		$('#mailboxes').append($('<li>Lade...</li>'));
+		$('#mailboxes').menu('refresh');
 		$('#messages').empty();
 		$('#messages').append($('<li>Lade...</li>'));
 		$('#messages').menu('refresh');
 	}
-	xmlrpc.call('getMessages', { 'sid' : sid }, function(msg) {
-		var notloggedin = $(msg).find('notloggedin').length != 0;
-		if(notloggedin)
-			return;
-		$('#messages').empty();
-		$(msg).find('message').each(function(index) {
-			var id = $(this).find('id').text();
-			var title = $(this).find('title').text();
-			var date = $(this).find('date').text();
-			var from = $(this).find('from').text();
-			var unread = $(this).find('unread').text();
+	xmlrpc.multicall([
+		{
+			proc : 'getMessages',
+			args : { 'sid' : sid },
+			handler : function(msg) {
+				var notloggedin = $(msg).find('notloggedin').length != 0;
+				if(notloggedin)
+					return;
+				$('#messages').empty();
+				$(msg).find('message').each(function(index) {
+					var id = $(this).find('id').text();
+					var title = $(this).find('title').text();
+					var date = $(this).find('date').text();
+					var from = $(this).find('from').text();
+					var unread = $(this).find('unread').text();
 
-			var tooltip = 'Von: ' + from + '<br />' +
-				'Datum: ' + date + '<br />' +
-				'Nachrichten-ID: ' + id;
-			if(unread == 'true')
-				tooltip += '<br />Ungelesen';
+					var tooltip = 'Von: ' + from + '<br />' +
+						'Datum: ' + date + '<br />' +
+						'Nachrichten-ID: ' + id;
+					if(unread == 'true')
+						tooltip += '<br />Ungelesen';
 
-			var node = $('<a href="#" onclick="return false">').text(title);
-			$('#messages').append($('<li title="message">').append(node).tooltip({ content : tooltip }));
-		});
-		$('#messages').menu('refresh');
-	});
+					var node = $('<a href="#" onclick="return false">').text(title);
+					$('#messages').append($('<li title="message">').append(node).tooltip({ content : tooltip }));
+				});
+				$('#messages').menu('refresh');
+			}
+		}, {
+			proc : 'getMailboxes',
+			args : { 'sid' : sid },
+			handler : function(msg) {
+				var notloggedin = $(msg).find('notloggedin').length != 0;
+				if(notloggedin)
+					return;
+				$('#mailboxes').empty();
+				$(msg).find('mailbox').each(function(index) {
+					var title = $(this).find('title').text();
+					var id = $(this).find('id').text();
+
+					var node = $('<a href="#" onclick="return false">').text(title);
+					$('#mailboxes').append($('<li>').append(node));
+				});
+				$('#mailboxes').menu('refresh');
+			}
+		}
+	]);
 };
 
 var loadStatus = function(update) {
@@ -383,16 +412,27 @@ var loadStatus = function(update) {
 	}
 	xmlrpc.call('getServerStatus', null, function(msg) {
 		$('#status').empty();
+		var servererrors = [];
 		$(msg).find('info').each(function(index) {
 			var name = $(this).attr('name');
 			var time = $(this).attr('time');
 			var online = time != '';
 
 			var node = $('<div>').text(name + ': ' + (online ? time : 'Ausgefallen'));
-			if(!online)
+			if(!online) {
 				node.css('color', 'red');
+				servererrors.push(name);
+			}
 			$('#status').append(node);
 		});
+		if(servererrors.length != 0) {
+			if(servererrors.length == 1) {
+				var name = servererrors.pop();
+				$('#servererrors').text('Ausfall: ' + name).css('color', 'red');
+			} else
+				$('#servererrors').text('mehrere Server down').css('color', 'red');
+		} else
+			$('#servererrors').text('Server: OK').css('color', 'green');
 	});
 };
 
@@ -401,6 +441,7 @@ var loadContent = function() {
 	loadBoards();
 	loadMessages();
 	loadStatus();
+	$('#currenttime').text(getDate());
 };
 
 var loadSession = function() {
@@ -486,6 +527,7 @@ var init = function() {
 	$('#boards').menu();
 
 	// initialize message list
+	$('#mailboxes').menu();
 	$('#messages').menu();
 
 	// initialize tabs
