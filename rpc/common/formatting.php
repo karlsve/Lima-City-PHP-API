@@ -51,6 +51,12 @@ function parseContent($xml, $doc) {
 		if(preg_match('#(http|https|ftp|ftps|sftp)://#', $src) == 0) {
 			if($src[0] != '/')
 				$src = '/' . $src;
+			if((strlen($src) > 7) && (substr($src, 0, 7) == '/math/?')) {
+				$result = $xml->createElement('math');
+				$result->appendChild($xml->createElement('url', substr($src, 7)));
+				$result->appendChild($xml->createElement('raw', $alt));
+				return($result);
+			}
 			$src = "https://www.lima-city.de$src";
 		}
 		$result = $xml->createElement('img');

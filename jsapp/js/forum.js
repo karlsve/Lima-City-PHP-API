@@ -145,6 +145,14 @@ var format = function(xml) {
 				$(node).attr('width', '400');
 				result.push(node);
 				break;
+			case 'math':
+				var url = $(this).find('url').text();
+				var alt = $(this).find('raw').text();
+				var node = document.createElement('img');
+				$(node).attr('src', 'http://latex.codecogs.com/png.latex?\\color{white}{' + url + '}');
+				$(node).attr('alt', alt);
+				result.push(node);
+				break;
 			default:
 				var node = document.createElement(this.nodeName);
 				$(node).append(format($(this)));
