@@ -52,13 +52,12 @@ XMLRPC.prototype.multicall = function(calls) {
 			'data' : JSON.stringify(d)
 		}
 	}).done(function(msg) {
-		var rootnode = $(msg).find(rootname);
 		for(var callname in calls) {
 			var call = calls[callname];
 			var proc = call['proc'];
 			var handler = call['handler'];
 			var ref = call['ref'];
-			handler(rootnode.find('> result[id="' + ref + '"]'));
+			handler($(msg).find(rootname + ' > result[ref="' + ref + '"]'));
 		}
 	});
 };
