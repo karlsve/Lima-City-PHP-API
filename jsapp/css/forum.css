@@ -70,16 +70,28 @@ li.deleted {
 	background: rgba(128, 128, 128, 0.5);
 }
 
-div.table {
+.table {
 	display: table;
 }
 
-div.table div.tr {
+.table .tr {
 	display: table-row;
 }
 
-div.table div.td {
+.table .td {
 	display: table-cell;
+}
+
+#tab-messages .td {
+	padding: 10px;
+}
+
+#tab-messages .td:first-child {
+	padding-left: 0;
+}
+
+#tab-messages .td:last-child {
+	padding-right: 0;
 }
 
 #top {
@@ -89,13 +101,16 @@ div.table div.td {
 	height: 55px;
 	width: 100%;
 	z-index: 1000;
+	overflow: hidden;
 }
 
 #top > * {
+	position: relative;
 	margin-top: 10px;
 	margin-bottom: 10px;
 	margin-right: 1%;
 	height: 100%;
+	display: table;
 }
 
 #tabs {
@@ -110,4 +125,13 @@ div.table div.td {
 #infobox {
 	float: right;
 	overflow: hidden;
+	text-align: right;
+}
+
+#notifications, #serverstatus,
+#mailboxes a,
+#messages a,
+#boards a,
+#newest a {
+	cursor: pointer;
 }

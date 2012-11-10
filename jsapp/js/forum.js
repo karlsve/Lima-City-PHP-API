@@ -70,6 +70,7 @@ var doUpdate = function() {
 	loadHomescreen(true);
 	loadMessages(true);
 	loadStatus(true);
+	loadNotifications();
 };
 
 var format = function(xml) {
@@ -304,7 +305,7 @@ var loadHomescreen = function(update) {
 				'Post-Author: ' + user +
 				info;
 
-			var node = $('<a href="#" onclick="return false">');
+			var node = $('<a>');
 			node.click(function() {
 				showThread($(this).data('url'));
 			});
@@ -349,7 +350,7 @@ var loadBoards = function(update) {
 				'Antworten: ' + replies + '<br />' +
 				'Neuester Thread: ' + newest_title;
 
-			var node = $('<a href="#" onclick="return false">').text(name);
+			var node = $('<a>').text(name);
 			$('#boards').append($('<li title="board">').append(node).tooltip({ content : tooltip }));
 		});
 		$('#boards').menu('refresh');
@@ -387,7 +388,7 @@ var loadMessages = function(update) {
 					if(unread == 'true')
 						tooltip += '<br />Ungelesen';
 
-					var node = $('<a href="#" onclick="return false">').text(title);
+					var node = $('<a>').text(title);
 					$('#messages').append($('<li title="message">').append(node).tooltip({ content : tooltip }));
 				});
 				$('#messages').menu('refresh');
@@ -404,13 +405,37 @@ var loadMessages = function(update) {
 					var title = $(this).find('title').text();
 					var id = $(this).find('id').text();
 
-					var node = $('<a href="#" onclick="return false">').text(title);
+					var node = $('<a>').text(title);
 					$('#mailboxes').append($('<li>').append(node));
 				});
 				$('#mailboxes').menu('refresh');
 			}
 		}
 	]);
+};
+
+var loadNotifications = function() {
+	xmlrpc.call('getNotifications', { 'sid' : sid }, function(msg) {
+		var notloggedin = $(msg).find('notloggedin').length != 0;
+		if(notloggedin)
+			return;
+		var notifications = '';
+		var names = {
+			'spam' : 'Spam',
+			'guestbook' : 'Gästebucheinträge',
+			'message' : 'Nachrichten',
+			'promowall' : 'Banner',
+			'notification' : 'Benachrichtigungen'
+		};
+		$(msg).find('notification').each(function(index) {
+			var type = $(this).find('type').text();
+			var count = $(this).find('count').text();
+			if(notifications != '')
+				notifications += ', ';
+			notifications += names[type] + ': ' + count;
+		});
+		$('#notifications').text(notifications != '' ? notifications : 'keine Benachrichtigungen');
+	});
 };
 
 var loadStatus = function(update) {
@@ -436,11 +461,11 @@ var loadStatus = function(update) {
 		if(servererrors.length != 0) {
 			if(servererrors.length == 1) {
 				var name = servererrors.pop();
-				$('#servererrors').text('Ausfall: ' + name).css('color', 'red');
+				$('#serverstatus').text('Ausfall: ' + name).css('color', 'red');
 			} else
-				$('#servererrors').text('mehrere Server down').css('color', 'red');
+				$('#serverstatus').text('mehrere Server down').css('color', 'red');
 		} else
-			$('#servererrors').text('Server: OK').css('color', 'green');
+			$('#serverstatus').text('Server: OK').css('color', 'green');
 	});
 };
 
@@ -449,6 +474,7 @@ var loadContent = function() {
 	loadBoards();
 	loadMessages();
 	loadStatus();
+	loadNotifications();
 	$('#currenttime').text(getDate());
 };
 
@@ -542,6 +568,11 @@ var init = function() {
 	$('#tabs').tabs();
 
 	$('#thread-title').html('<i>kein Thread ge&ouml;ffnet</i>');
+
+	// initialize status bar
+	$('#serverstatus').click(function(event) {
+		$('#tabs').tabs('select', '#tab-status');
+	});
 
 	// hide elements
 	$('#passworderror').hide();
