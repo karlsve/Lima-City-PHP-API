@@ -15,7 +15,6 @@ XMLRPC.prototype.call = function(proc, args, handler) {
 	var rootname = this.root;
 	var d = {
 		'proc' : proc,
-		'type' : 'single'
 	};
 	if((args != undefined) && (args != null))
 		d['args'] = JSON.stringify(args);
@@ -38,7 +37,7 @@ XMLRPC.prototype.multicall = function(calls) {
 		var call = calls[callname];
 		var proc = call['proc'];
 		var args = call['args'];
-		var ref = 'result-' + refid++;
+		var ref = refid++;
 		calls[callname].ref = ref;
 		if(args != undefined)
 			d.push({ proc : proc, args : args, ref : ref });
@@ -50,7 +49,6 @@ XMLRPC.prototype.multicall = function(calls) {
 		type : 'POST',
 		dataType : 'xml',
 		data : {
-			'type' : 'multi',
 			'data' : JSON.stringify(d)
 		}
 	}).done(function(msg) {
@@ -60,7 +58,7 @@ XMLRPC.prototype.multicall = function(calls) {
 			var proc = call['proc'];
 			var handler = call['handler'];
 			var ref = call['ref'];
-			handler(rootnode.find('> ' + ref));
+			handler(rootnode.find('> result[id="' + ref + '"]'));
 		}
 	});
 };

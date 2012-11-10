@@ -16,7 +16,7 @@ function xmlrpc_register_function($name, $args, $fname) {
 function xmlrpc_call($xml, $result, $name, $args) {
 	global $xmlrpc_functions;
 	if(!isset($xmlrpc_functions[$name]))
-		return false;
+		throw new Exception('procedure not found');
 	$f = $xmlrpc_functions[$name];
 	if(($f['args'] === false) && ($args !== false)) // no args required but given
 		return false;
@@ -24,11 +24,11 @@ function xmlrpc_call($xml, $result, $name, $args) {
 	if($f['args'] !== false) // missing arguments
 		foreach($f['args'] as $arg)
 			if(!isset($args->{$arg}))
-				return false;
+				throw new Exception('missing argument');
 
 	if($f['args'] !== false) {
 		if(count(get_object_vars($args)) != count($f['args']))
-			return false;
+			throw new Exception('too many arguments');
 		$f['fname']($xml, $result, $args);
 	} else
 		$f['fname']($xml, $result);
@@ -87,41 +87,61 @@ $xml->preserveWhiteSpace = false;
 $xml->formatOutput = true;
 $root = $xml->createElementNS($namespace, $rootname);
 
-if(isset($_REQUEST['type'])) {
-	$type = $_REQUEST['type'];
+$type = 'unknown';
+if(isset($_REQUEST['proc']))
+	$type = 'single';
+else if(isset($_REQUEST['data']))
+	$type = 'multi';
 
-	if($type == 'single') {
-		$result = false;
-		if(isset($_REQUEST['proc'])) {
-			$proc = $_REQUEST['proc'];
-			$args = false;
-			if(isset($_REQUEST['args']))
-				$args = json_decode($_REQUEST['args']);
-			$resultxml = $xml->createElement('result');
+$root->appendChild($xml->createElement('type', $type));
+if($type == 'single') {
+	$result = false;
+	if(isset($_REQUEST['proc'])) {
+		$proc = $_REQUEST['proc'];
+		$args = false;
+		if(isset($_REQUEST['args']))
+			$args = json_decode($_REQUEST['args']);
+		$resultxml = $xml->createElement('result');
+		try {
 			$result = xmlrpc_call($xml, $resultxml, $proc, $args);
-		}
-		if($result === false)
-			$root->appendChild($xml->createElement('fail'));
-		else
-			$root->appendChild($result);
-	} else if($type == 'multi') {
-		if(isset($_REQUEST['data'])) {
-			$requests = json_decode($_REQUEST['data']);
-			foreach($requests as $request) {
-				$resultxml = $xml->createElement($request->ref);
-				$result = xmlrpc_call($xml, $resultxml, $request->proc, $request->args == null ? false : $request->args);
-				if($result === false)
-					$root->appendChild($xml->createElement('fail', $request->ref));
-				else
-					$root->appendChild($result);
-			}
-		} else {
-			$root->appendChild($xml->createElement('fail'));
+		} catch(Exception $e) {
+			$result = $xml->createElement('fail', $e->getMessage());
 		}
 	}
-} else {
-	$root->appendChild($xml->createElement('fail'));
-}
+	if($result === false)
+		$root->appendChild($xml->createElement('fail'));
+	else
+		$root->appendChild($result);
+} else if($type == 'multi') {
+	if(isset($_REQUEST['data'])) {
+		$requests = json_decode($_REQUEST['data']);
+		$i = 0;
+		foreach($requests as $request) {
+			$ref = $i++;
+			if(isset($request->ref))
+				$ref = $request->ref;
+			$resultxml = $xml->createElement('result');
+			$resultref = $xml->createAttribute('ref');
+			$resultref->appendChild($xml->createTextNode($ref));
+			$resultxml->appendChild($resultref);
+			try {
+				$result = xmlrpc_call($xml, $resultxml, $request->proc, !isset($request->args) ? false : $request->args);
+			} catch(Exception $e) {
+				$result = $xml->createElement('fail', $e->getMessage());
+			}
+			if($result === false) {
+				$result = $xml->createElement('result');
+				$result->appendChild($resultref);
+				$result->appendChild($xml->createElement('fail'));
+				$root->appendChild($result);
+			} else
+				$root->appendChild($result);
+		}
+	} else {
+		$root->appendChild($xml->createElement('fail', 'missing data parameter'));
+	}
+} else
+	$root->appendChild($xml->createElement('fail', 'unknown type'));
 
 $xml->appendChild($root);
 echo($xml->saveXML());
