@@ -104,7 +104,7 @@
 						</div>
 						<h3>Editor</h3>
 						<div>
-							<textarea id="thread-write-content" style="width: 99%" rows="16" wrap="vitrual"></textarea>
+							<textarea id="thread-write-content" style="width: 99%" rows="16" wrap="soft"></textarea>
 						</div>
 						<div>
 							<button class="cancel">Abbrechen</button>
@@ -114,13 +114,28 @@
 				</div>
 				<div id="tab-messages">
 					<h2>Private Nachrichten</h2>
-					<div class="table" style="width: 100%">
-						<div class="td" style="width: 30%">
-							<ul id="mailboxes"></ul>
+					<div id="messages-listing">
+						<div class="table" style="width: 100%">
+							<div class="td" style="width: 30%">
+								<ul id="mailboxes"></ul>
+							</div>
+							<div class="td">
+								<ul id="messages"></ul>
+							</div>
 						</div>
-						<div class="td">
-							<ul id="messages"></ul>
-						</div>
+					</div>
+					<div id="messagereader">
+						<h3 id="messagereader-title"></h3>
+						<button class="back">&Uuml;bersicht</button>
+						<dl>
+							<dt>Von:</dt>
+							<dd id="messagereader-from"></dd>
+							<dt>An:</dt>
+							<dd id="messagereader-to"></dd>
+							<dt>Datum:</dt>
+							<dd id="messagereader-date"></dd>
+						</dl>
+						<div id="messagereader-content"></div>
 					</div>
 				</div>
 				<div id="tab-usercp"></div>

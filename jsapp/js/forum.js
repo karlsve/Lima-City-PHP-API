@@ -250,6 +250,30 @@ var showThread = function(url) {
 	});
 };
 
+var showMessage = function(id) {
+	$('#tabs').tabs('select', '#tab-messages');
+	xmlrpc.call('getMessage', { 'sid' : sid, 'id' : id }, function(msg) {
+		var title = $(msg).find('title').text();
+		var from = $(msg).find('from').text();
+		var to = $(msg).find('to').text();
+		var date = $(msg).find('date').text();
+		$('#messagereader-title').text(title);
+		$('#messagereader-from').text(from);
+		$('#messagereader-to').text(to);
+		$('#messagereader-date').text(date);
+		$('#messagereader-content').empty();
+		$('#messagereader-content').append(format($(msg).find('content')));
+
+		$('#messages-listing').hide();
+		$('#messagereader').show();
+	});
+};
+
+var showMessageList = function() {
+	$('#messages-listing').show();
+	$('#messagereader').hide();
+};
+
 var loadHomescreen = function(update) {
 	if(!update) {
 		$('#newest').empty();
@@ -357,7 +381,7 @@ var loadBoards = function(update) {
 	});
 };
 
-var loadMessages = function(update) {
+var loadMessages = function(update, mailboxid) {
 	if(!update) {
 		$('#mailboxes').empty();
 		$('#mailboxes').append($('<li>Lade...</li>'));
@@ -389,6 +413,9 @@ var loadMessages = function(update) {
 						tooltip += '<br />Ungelesen';
 
 					var node = $('<a>').text(title);
+					node.click(function() {
+						showMessage(id);
+					});
 					$('#messages').append($('<li title="message">').append(node).tooltip({ content : tooltip }));
 				});
 				$('#messages').menu('refresh');
@@ -419,7 +446,8 @@ var loadNotifications = function() {
 		var notloggedin = $(msg).find('notloggedin').length != 0;
 		if(notloggedin)
 			return;
-		var notifications = '';
+		var notifications = [];
+		var notificationcount = 0;
 		var names = {
 			'spam' : 'Spam',
 			'guestbook' : 'Gästebucheinträge',
@@ -430,11 +458,15 @@ var loadNotifications = function() {
 		$(msg).find('notification').each(function(index) {
 			var type = $(this).find('type').text();
 			var count = $(this).find('count').text();
-			if(notifications != '')
-				notifications += ', ';
-			notifications += names[type] + ': ' + count;
+			notifications.push(names[type] + ': ' + count);
+			notificationcount += parseInt(count);
 		});
-		$('#notifications').text(notifications != '' ? notifications : 'keine Benachrichtigungen');
+		var text = 'keine Benachrichtigungen';
+		if(notifications.length == 1)
+			text = notifications.pop();
+		else if(notifications.length > 1)
+			text = notificationcount + ' Benachrichtigungen';
+		$('#notifications').text(text);
 	});
 };
 
@@ -554,6 +586,10 @@ var init = function() {
 	});
 	$('#thread-preview-chars').html('<i>Zeichen: <b>0</b></i>');
 
+	// initialize back button on message reader
+	$('#messagereader button.back').button();
+	$('#messagereader button.back').click(showMessageList);
+
 	// initialize newest threads list
 	$('#newest').menu();
 
@@ -579,6 +615,7 @@ var init = function() {
 	$('#main').hide();
 	$('#thread-write').hide();
 	$('#thread-write-enable').hide();
+	$('#messagereader').hide();
 
 	updater();
 

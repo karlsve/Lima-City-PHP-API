@@ -135,3 +135,20 @@ li.deleted {
 #newest a {
 	cursor: pointer;
 }
+
+dl {
+	overflow: hidden;
+}
+
+dt {
+	float: left;
+	font-weight: bold;
+	padding-left: 5px;
+	margin: 0;
+	width: 16em;
+}
+
+dd {
+	margin-bottom: 5px;
+	margin-left: 17em;
+}
