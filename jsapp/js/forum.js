@@ -359,6 +359,8 @@ var loadHomescreen = function(update) {
 				node.append(document.createTextNode(' '));
 				node.append(icons);
 			}
+			if(forum == 'Spam-Forum')
+				node.addClass('spamforum');
 			$('#newest').append($('<li title="thread">').append(node).tooltip({ content : tooltip }));
 		});
 		$('#newest').menu('refresh');
@@ -486,21 +488,26 @@ var loadNotifications = function() {
 		var names = {
 			'spam' : 'Spam',
 			'guestbook' : 'Gästebucheinträge',
-			'message' : 'Nachrichten',
+			'messages' : 'Nachrichten',
 			'promowall' : 'Banner',
 			'notification' : 'Benachrichtigungen'
 		};
+		var notificationtype = 'none';
 		$(msg).find('notification').each(function(index) {
 			var type = $(this).find('type').text();
 			var count = $(this).find('count').text();
 			notifications.push(names[type] + ': ' + count);
 			notificationcount += parseInt(count);
+			notificationtype = type;
 		});
 		var text = 'keine Benachrichtigungen';
 		if(notifications.length == 1)
 			text = notifications.pop();
-		else if(notifications.length > 1)
+		else if(notifications.length > 1) {
 			text = notificationcount + ' Benachrichtigungen';
+			notificationtype = 'many';
+		}
+		$('#notifications').data('type', notificationtype);
 		$('#notifications').text(text);
 	});
 };
@@ -642,8 +649,19 @@ var init = function() {
 
 	// initialize notification area
 	$('#notifications').click(function() {
-		$('#tabs').tabs('select', '#tab-messages');
-		loadMessages(false, 4);
+		// 4 = notifications
+		// 1 = messages
+		var type = $(this).data('type');
+		switch(type) {
+			case 'notification':
+				$('#tabs').tabs('select', '#tab-messages');
+				loadMessages(false, 4);
+				break;
+			case 'messages':
+				$('#tabs').tabs('select', '#tab-messages');
+				loadMessages(false, 1);
+				break;
+		}
 	});
 
 	// initialize status bar
