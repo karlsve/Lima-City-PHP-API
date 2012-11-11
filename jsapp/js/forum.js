@@ -18,6 +18,14 @@ var setCurrentMailbox = function(mbox) {
 	currentmailbox = mbox;
 };
 
+var setUsername = function(user) {
+	username = user;
+};
+
+var setPassword = function(pass) {
+	password = pass;
+};
+
 var login = function(user, pass) {
 	user = user.trim();
 	pass = pass.trim();
@@ -36,8 +44,8 @@ var login = function(user, pass) {
 			return;
 		}
 		sid = $(msg).find('session').text();
-		username = user;
-		password = pass;
+		setUsername(user);
+		setPassword(pass);
 		saveSession();
 		$('#loginbox').dialog('close');
 		$('#main').show();
@@ -275,6 +283,8 @@ var showMessage = function(id) {
 
 		$('#messages-listing').hide();
 		$('#messagereader').show();
+		loadMessages(true);
+		loadNotifications();
 	});
 };
 
@@ -430,7 +440,10 @@ var loadMessages = function(update, mailboxid) {
 					node.click(function() {
 						showMessage(id);
 					});
-					$('#messages').append($('<li title="message">').append(node).tooltip({ content : tooltip }));
+					var li = $('<li title="message">').append(node).tooltip({ content : tooltip });
+					if(unread == 'true')
+						li.addClass('message-unread');
+					$('#messages').append(li);
 				});
 				$('#messages').menu('refresh');
 			}

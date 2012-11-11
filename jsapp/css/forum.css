@@ -70,6 +70,10 @@ li.deleted {
 	background: rgba(128, 128, 128, 0.5);
 }
 
+.message-unread > a {
+	color: red !important;
+}
+
 .table {
 	display: table;
 }
