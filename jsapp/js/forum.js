@@ -383,9 +383,11 @@ var loadBoards = function(update) {
 
 var loadMessages = function(update, mailboxid) {
 	if(!update) {
-		$('#mailboxes').empty();
-		$('#mailboxes').append($('<li>Lade...</li>'));
-		$('#mailboxes').menu('refresh');
+		if(mailboxid == undefined) {
+			$('#mailboxes').empty();
+			$('#mailboxes').append($('<li>Lade...</li>'));
+			$('#mailboxes').menu('refresh');
+		}
 		$('#messages').empty();
 		$('#messages').append($('<li>Lade...</li>'));
 		$('#messages').menu('refresh');
@@ -393,7 +395,7 @@ var loadMessages = function(update, mailboxid) {
 	xmlrpc.multicall([
 		{
 			proc : 'getMessages',
-			args : { 'sid' : sid },
+			args : { 'sid' : sid, 'mailbox' : (mailboxid != undefined) ? mailboxid : false },
 			handler : function(msg) {
 				var notloggedin = $(msg).find('notloggedin').length != 0;
 				if(notloggedin)
@@ -433,9 +435,14 @@ var loadMessages = function(update, mailboxid) {
 					var id = $(this).find('id').text();
 
 					var node = $('<a>').text(title);
+					node.click(function() {
+						loadMessages(false, id);
+					});
 					$('#mailboxes').append($('<li>').append(node));
 				});
 				$('#mailboxes').menu('refresh');
+				if(!update)
+					showMessageList();
 			}
 		}
 	]);
@@ -605,8 +612,14 @@ var init = function() {
 
 	$('#thread-title').html('<i>kein Thread ge&ouml;ffnet</i>');
 
+	// initialize notification area
+	$('#notifications').click(function() {
+		$('#tabs').tabs('select', '#tab-messages');
+		loadMessages(false, 4);
+	});
+
 	// initialize status bar
-	$('#serverstatus').click(function(event) {
+	$('#serverstatus').click(function() {
 		$('#tabs').tabs('select', '#tab-status');
 	});
 

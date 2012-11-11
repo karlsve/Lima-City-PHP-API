@@ -2,8 +2,11 @@
 
 function rpc_getMessages($xml, $result, $args) {
 	global $url_messages;
-	$doc = phpQuery::newDocument(get_request_cookie($url_messages, "sid={$args->sid}"));
-	addToCache($url_messages, $doc, "sid={$args->sid}");
+	$url = $url_messages;
+	if($args->mailbox != false)
+		$url .= "/box%3A{$args->mailbox}";
+	$doc = phpQuery::newDocument(get_request_cookie($url, "sid={$args->sid}"));
+	addToCache($url, $doc, "sid={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 
@@ -45,4 +48,4 @@ function rpc_getMessages($xml, $result, $args) {
 	return $result;
 }
 
-xmlrpc_register_function('getMessages', array('sid'), 'rpc_getMessages');
+xmlrpc_register_function('getMessages', array('sid', 'mailbox'), 'rpc_getMessages');
