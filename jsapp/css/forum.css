@@ -74,6 +74,10 @@ li.deleted {
 	color: red !important;
 }
 
+.spamforum {
+	color: red !important;
+}
+
 .table {
 	display: table;
 }
