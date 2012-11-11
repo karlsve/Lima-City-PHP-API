@@ -4,10 +4,19 @@ var sid = false;
 var xmlrpcurl = '../api/';
 var username = '';
 var password = ''; // used for jabber login
+var currentmailbox = 1;
 
 var formatter;
 
 var xmlrpc = new XMLRPC('../rpc/xmlrpc.php', 'lima');
+
+var getCurrentMailbox = function() {
+	return currentmailbox;
+};
+
+var setCurrentMailbox = function(mbox) {
+	currentmailbox = mbox;
+};
 
 var login = function(user, pass) {
 	user = user.trim();
@@ -392,14 +401,16 @@ var loadMessages = function(update, mailboxid) {
 		$('#messages').append($('<li>Lade...</li>'));
 		$('#messages').menu('refresh');
 	}
+	var currentMailbox = getCurrentMailbox();
 	xmlrpc.multicall([
 		{
 			proc : 'getMessages',
-			args : { 'sid' : sid, 'mailbox' : (mailboxid != undefined) ? mailboxid : false },
+			args : { 'sid' : sid, 'mailbox' : (mailboxid != undefined) ? mailboxid : currentMailbox },
 			handler : function(msg) {
 				var notloggedin = $(msg).find('notloggedin').length != 0;
 				if(notloggedin)
 					return;
+				setCurrentMailbox(mailboxid);
 				$('#messages').empty();
 				$(msg).find('message').each(function(index) {
 					var id = $(this).find('id').text();
@@ -429,6 +440,7 @@ var loadMessages = function(update, mailboxid) {
 				var notloggedin = $(msg).find('notloggedin').length != 0;
 				if(notloggedin)
 					return;
+				var mbox = (mailboxid == undefined) ? currentMailbox : mailboxid;
 				$('#mailboxes').empty();
 				$(msg).find('mailbox').each(function(index) {
 					var title = $(this).find('title').text();
@@ -438,7 +450,10 @@ var loadMessages = function(update, mailboxid) {
 					node.click(function() {
 						loadMessages(false, id);
 					});
-					$('#mailboxes').append($('<li>').append(node));
+					var li = $('<li>').append(node);
+					if(id == mbox)
+						li.addClass('ui-state-active').addClass('ui-corner-all');
+					$('#mailboxes').append(li);
 				});
 				$('#mailboxes').menu('refresh');
 				if(!update)
