@@ -486,7 +486,7 @@ var loadNotifications = function() {
 		var names = {
 			'spam' : 'Spam',
 			'guestbook' : 'Gästebucheinträge',
-			'message' : 'Nachrichten',
+			'messages' : 'Nachrichten',
 			'promowall' : 'Banner',
 			'notification' : 'Benachrichtigungen'
 		};
