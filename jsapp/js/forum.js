@@ -402,15 +402,16 @@ var loadMessages = function(update, mailboxid) {
 		$('#messages').menu('refresh');
 	}
 	var currentMailbox = getCurrentMailbox();
+	var mbox = (mailboxid != undefined) ? mailboxid : currentMailbox;
 	xmlrpc.multicall([
 		{
 			proc : 'getMessages',
-			args : { 'sid' : sid, 'mailbox' : (mailboxid != undefined) ? mailboxid : currentMailbox },
+			args : { 'sid' : sid, 'mailbox' : mbox },
 			handler : function(msg) {
 				var notloggedin = $(msg).find('notloggedin').length != 0;
 				if(notloggedin)
 					return;
-				setCurrentMailbox(mailboxid);
+				setCurrentMailbox(mbox);
 				$('#messages').empty();
 				$(msg).find('message').each(function(index) {
 					var id = $(this).find('id').text();
@@ -440,7 +441,6 @@ var loadMessages = function(update, mailboxid) {
 				var notloggedin = $(msg).find('notloggedin').length != 0;
 				if(notloggedin)
 					return;
-				var mbox = (mailboxid == undefined) ? currentMailbox : mailboxid;
 				$('#mailboxes').empty();
 				$(msg).find('mailbox').each(function(index) {
 					var title = $(this).find('title').text();
