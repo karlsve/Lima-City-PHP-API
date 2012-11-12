@@ -8,19 +8,44 @@ function rpc_getAboutOfProfile($xml, $result, $args) {
 	addToCache($url, $doc, "sid={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
-	
 	$elements = $doc->find("div#tabAbout dl dt");
 	foreach($elements as $element) {
 		$element = pq($element);
-		$content = preg_replace('|\s\s|', '', (preg_replace('|<.*?>|', '', $element->next('dd')->html())));
-		if(empty($content))
-			$content = 'empty';
-		$elementxml = $xml->createElement('element');
+		$contentelement = $element->next('dd');
 		$name = preg_replace('|:|', '', $element->html());
+		$elementxml = $xml->createElement('element');
 		$elementxml->appendChild($xml->createElement('name', $name));
-		$elementxml->appendChild($xml->createElement('content', $content));
+		if($name == 'Messenger') {
+			$elementxml = getMessenger($xml, $elementxml, $contentelement);
+		} else {
+			$content = strip_tags($contentelement->html());
+			$elementxml->appendChild($xml->createElement('content', $content));
+		}
 		$result->appendChild($elementxml);
 	}
+	return $result;
+}
+
+function getMessenger($xml, $result, $element) {
+	$messengerxml = $xml->createElement('messenger');
+	$messenger = $element->find('a');
+	foreach($messenger as $m) {
+		$m = pq($m);
+		$url = $m->attr('href');
+		if(strpos($url, 'icq.com') !== false) {
+			$link =  preg_replace('!\D!', "", $url);
+			$messengerxml->appendChild($xml->createElement('icq', $link));
+		}
+		elseif(strpos($url, 'aim') !== false) {
+			$link =  preg_replace('!aim:GoIM\?screenname=!', '', $url);
+			$messengerxml->appendChild($xml->createElement('aim', $link));
+		}
+		elseif(strpos($url, 'skype') !== false) {
+			$link =  preg_replace('!(\w+?\:)|(\?\w+)!', '', $url);
+			$messengerxml->appendChild($xml->createElement('skype', $link));
+		}
+	}
+	$result->appendChild($messengerxml);
 	return $result;
 }
 
