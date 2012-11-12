@@ -18,6 +18,10 @@ var setCurrentMailbox = function(mbox) {
 	currentmailbox = mbox;
 };
 
+var getUsername = function() {
+	return username;
+};
+
 var setUsername = function(user) {
 	username = user;
 };
@@ -305,9 +309,9 @@ var loadHomescreen = function(update) {
 			return;
 		$('#newest').empty();
 		$(msg).find('newest > thread').each(function(index) {
-			var important = $(this).find('flags').attr('important');
-			var fixed = $(this).find('flags').attr('fixed');
-			var closed = $(this).find('flags').attr('closed');
+			var important = $(this).find('flags important').text();
+			var fixed = $(this).find('flags fixed').text();
+			var closed = $(this).find('flags closed').text();
 			var name = $(this).find('name').text();
 			var url = $(this).find('url').text();
 			var date = $(this).find('date').text();
@@ -359,7 +363,9 @@ var loadHomescreen = function(update) {
 				node.append(document.createTextNode(' '));
 				node.append(icons);
 			}
-			if(forum == 'Spam-Forum')
+			if(user == username)
+				node.addClass('ownpost');
+			else if(forum == 'Spam-Forum')
 				node.addClass('spamforum');
 			$('#newest').append($('<li title="thread">').append(node).tooltip({ content : tooltip }));
 		});
@@ -557,7 +563,7 @@ var loadSession = function() {
 		return false;
 	if(sessionStorage.sid == 'undefined')
 		return false;
-	username = sessionStorage.username;
+	username = localStorage.username;
 	password = sessionStorage.password;
 	sid = sessionStorage.sid;
 	return true;
@@ -644,6 +650,7 @@ var init = function() {
 
 	// initialize tabs
 	$('#tabs').tabs();
+	$('#usercp-tabs').tabs();
 
 	$('#thread-title').html('<i>kein Thread ge&ouml;ffnet</i>');
 

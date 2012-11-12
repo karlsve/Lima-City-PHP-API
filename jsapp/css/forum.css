@@ -78,6 +78,10 @@ li.deleted {
 	color: red !important;
 }
 
+.ownpost {
+	color: green !important;
+}
+
 .table {
 	display: table;
 }

@@ -138,7 +138,82 @@
 						<div id="messagereader-content"></div>
 					</div>
 				</div>
-				<div id="tab-usercp"></div>
+				<div id="tab-usercp">
+					<h2>Verwaltung</h2>
+					<div id="usercp-tabs">
+						<ul>
+							<li><a href="#tab-profile">Profil</a></li>
+							<li><a href="#tab-account">Account</a></li>
+						</ul>
+						<div id="tab-profile">
+							<h3>Profil</h3>
+							<fieldset>
+								<legend>Forum</legend>
+								<p>
+									<label for="signature">Signatur</label>
+									<textarea name="signature" id="signature"></textarea>
+								</p>
+							</fieldset>
+							<fieldset>
+								<legend>Pers&ouml;nliche Daten</legend>
+								<p>
+									<label for="fullname">Name</label>
+									<input type="text" name="fullname" id="fullname" />
+								</p>
+								<p>
+									<label for="sex">Geschlecht</label>
+									<select name="sex" id="sex">
+										<option value="0" label="keine Angabe">keine Angabe</option>
+										<option value="1" label="m&auml;nnlich">m&auml;nnlich</option>
+										<option value="2" label="weiblich">weiblich</option>
+									</select>
+								</p>
+								<p>
+									<label for="relationship">Beziehung</label>
+									<select name="relationship" id="relationship">
+										<option value="0" label="keine Angabe">keine Angabe</option>
+										<option value="1" label="vergeben">vergeben</option>
+										<option value="2" label="Single">Single</option>
+									</select>
+								</p>
+								<p>
+									<label for="smoker">Raucher</label>
+									<select name="smoker" id="smoker">
+										<option value="0" label="keine Angabe">keine Angabe</option>
+										<option value="1" label="nein">nein</option>
+										<option value="2" label="ja">ja</option>
+									</select>
+								</p>
+								<p>
+									<label name="size">Gr&ouml;&szlig;e</label>
+									<input type="text" name="size" maxlength="3" size="5" /> cm
+								</p>
+							</fieldset>
+						</div>
+						<div id="tab-account">
+							<h3>Account</h3>
+							<fieldset>
+								<legend>E-Mails</legend>
+								<p>
+									<label for="mailmessageSetting">E-Mail-Benachrichtigungen bei neuer privater Nachricht</label>
+									<input type="checkbox" id="mailmessageSettings" name="mailmessageSettings" />
+								</p>
+								<p>
+									<label for="mailauctionsSetting">E-Mail-Benachrichtigung bei gewonnener Auktion</label>
+									<input type="checkbox" id="mailauctionsSetting" name="mailauctionSetting" />
+								</p>
+								<p>
+									<label for="newsletterSetting">Newsletter und aktuelle Informationen per E-Mail empfangen</label>
+									<input type="checkbox" id="newsletterSetting" name="newsletterSetting" />
+								</p>
+								<p>
+									<label for="noQuotePNSetting">Keine Benachrichtigung wenn ich zitiert werde</label>
+									<input type="checkbox" id="noQuotePNSetting" name="noQuotePNSetting" />
+								</p>
+							</fieldset>
+						</div>
+					</div>
+				</div>
 				<div id="tab-chat"></div>
 				<div id="tab-status">
 					<p>Hier siehst du sofort wenn ein Server ausf&auml;llt oder langsam ist.</p>
