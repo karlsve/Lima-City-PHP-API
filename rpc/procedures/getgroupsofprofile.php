@@ -9,7 +9,7 @@ function rpc_getGroupsOfProfile($xml, $result, $args) {
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 	
-	$groups = $doc->find('div.tabPage ul li:has(a[href^="/groups/"])');
+	$groups = $doc->find('div#tabGroups ul li:has(a[href^="/groups/"])');
 	foreach($groups as $group) {
 		$group = pq($group);
 		$groupxml = $xml->createElement('group');
