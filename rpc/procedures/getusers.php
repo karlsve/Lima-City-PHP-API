@@ -4,7 +4,7 @@ function rpc_getUsers($xml, $result, $args) {
 	global $url_profiles;
 	$perpage = 100;
 	$page = isset($args->page) ? intVal($args->page) : 0;
-	$f = "/page%3A$page/perpage%3A100";
+	$f = "/page%3A$page/perpage%3A$page";
 	if(isset($args->filter)) {
 		switch($args->filter) {
 			case 'admin':
@@ -44,6 +44,7 @@ function rpc_getUsers($xml, $result, $args) {
 		$user->appendChild($xml->createElement('last-login', $login));
 		$result->appendChild($user);
 	}
+	return $result;
 }
 
 xmlrpc_register_function('getUsers', array('sid', 'o:filter', 'o:page'), 'rpc_getUsers');
