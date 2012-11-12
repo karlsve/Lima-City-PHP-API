@@ -21,14 +21,22 @@ function xmlrpc_call($xml, $result, $name, $args) {
 	if(($f['args'] === false) && ($args !== false)) // no args required but given
 		return false;
 
-	if($f['args'] !== false) // missing arguments
-		foreach($f['args'] as $arg)
+	if($f['args'] !== false) { // missing arguments
+		foreach($f['args'] as $arg) {
+			if((strlen($arg) > 2) && (substr($arg, 0, 2) == 'o:')) // o: ?
+				continue;
 			if(!isset($args->{$arg}))
 				throw new Exception('missing argument');
+		}
+	}
 
 	if($f['args'] !== false) {
-		if(count(get_object_vars($args)) != count($f['args']))
-			throw new Exception('too many arguments');
+		if($args === false)
+			$f['fname']($xml, $result, new stdClass());
+		else
+			foreach(get_object_vars($args) as $arg => $value)
+				if(!in_array($arg, $f['args']) && !in_array("o:$arg", $f['args']))
+					throw new Exception('too many arguments: ' . $arg);
 		$f['fname']($xml, $result, $args);
 	} else
 		$f['fname']($xml, $result);
