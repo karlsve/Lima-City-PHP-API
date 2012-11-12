@@ -9,7 +9,7 @@ function rpc_getFriendsOfProfile($xml, $result, $args) {
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 	
-	$friends = $doc->find('div.tabPage ul li:has(a[href^="/profile/"])');
+	$friends = $doc->find('div#tabBuddies ul li:has(a[href^="/profile/"])');
 	foreach($friends as $friend) {
 		$friend = pq($friend);
 		$friendxml = $xml->createElement('friend');
