@@ -78,7 +78,7 @@ li.deleted {
 	color: red !important;
 }
 
-.ownpost {
+.ownpost, .self {
 	color: green !important;
 }
 
@@ -144,7 +144,8 @@ li.deleted {
 #mailboxes a,
 #messages a,
 #boards a,
-#newest a {
+#newest a,
+#userlist a {
 	cursor: pointer;
 }
 

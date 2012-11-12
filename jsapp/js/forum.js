@@ -5,6 +5,7 @@ var xmlrpcurl = '../api/';
 var username = '';
 var password = ''; // used for jabber login
 var currentmailbox = 1;
+var userlistfilter = 'online';
 
 var formatter;
 
@@ -92,6 +93,7 @@ var doUpdate = function() {
 	loadMessages(true);
 	loadStatus(true);
 	loadNotifications();
+	loadUserlist(true);
 };
 
 var format = function(xml) {
@@ -518,6 +520,33 @@ var loadNotifications = function() {
 	});
 };
 
+var loadUserlist = function(update) {
+	if(!update) {
+		$('#userlist').empty();
+		$('#userlist').append($('<div>Lade...</div>'));
+	}
+	xmlrpc.call('getUsers', { 'sid' : sid, 'filter' : userlistfilter }, function(msg) {
+		$('#userlist').empty();
+		$(msg).find('user').each(function(index) {
+			var name = $(this).find('name').text();
+			var gulden = $(this).find('gulden').text();
+			var rank = $(this).find('rang').text();
+			var lastlogin = $(this).find('last-login').text();
+
+			var tooltip = 'Benutzername: ' + name + '<br />'
+				+ 'Gulden: ' + gulden + '<br />'
+				+ 'Rang: ' + rank + '<br />'
+				+ 'Letzter Login: ' + lastlogin;
+
+			var node = $('<a>').text(name);
+			if(name == username)
+				node.addClass('self');
+			$('#userlist').append($('<li title="user">').append(node).tooltip({ content : tooltip }));
+		});
+		$('#userlist').menu('refresh');
+	});
+};
+
 var loadStatus = function(update) {
 	if(!update) {
 		$('#status').empty();
@@ -555,6 +584,7 @@ var loadContent = function() {
 	loadMessages();
 	loadStatus();
 	loadNotifications();
+	loadUserlist();
 	$('#currenttime').text(getDate());
 };
 
@@ -647,6 +677,9 @@ var init = function() {
 	// initialize message list
 	$('#mailboxes').menu();
 	$('#messages').menu();
+
+	// initialize user list
+	$('#userlist').menu();
 
 	// initialize tabs
 	$('#tabs').tabs();
