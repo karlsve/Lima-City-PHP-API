@@ -37,7 +37,7 @@ function rpc_getBoard($xml, $result, $args) {
 		$threadxml->appendChild($xml->createElement('url', $url));
 		$threadxml->appendChild($xml->createElement('views', $views));
 		$threadxml->appendChild($xml->createElement('replies', $replies));
-		$threadxml->appendChild($xml->createElement('author', $threadauthor));
+		$threadxml->appendChild($threadauthor);
 		$threadxml->appendChild($xml->createElement('date', $date));
 		$result->appendChild($threadxml);
 	}
