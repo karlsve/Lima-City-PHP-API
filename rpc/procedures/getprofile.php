@@ -1,7 +1,8 @@
 <?php
 
 function rpc_getProfile($xml, $result, $args) {
-	
+	if(!lima_checklogin($xml, $result, $args->sid))
+		return $result;
 	$about = $xml->createElement('about');
 	$about = rpc_getAboutOfProfile($xml, $about, $args);
 	$result->appendChild($about);
