@@ -7,7 +7,7 @@ function rpc_getNoticeText($xml, $result, $args) {
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 
-	$notice = base64_decode($doc->find('#noticetext1.inner')->html());
+	$notice = base64_decode(substr($doc->find('#noticetext1.inner')->html(), 4));
 	$result->appendChild($xml->createElement('notice', $notice));
 	return $result;
 }
@@ -15,7 +15,7 @@ function rpc_getNoticeText($xml, $result, $args) {
 function getNoticeText($sid) {
 	global $url_homepage;
 	$doc = get_cache_cookie($url_homepage, "sid=$sid");
-	$notice = base64_decode($doc->find('p#noticetext1.inner')->html());
+	$notice = base64_decode(substr($doc->find('p#noticetext1.inner')->html(), 4));
 	return $notice;
 }
 
