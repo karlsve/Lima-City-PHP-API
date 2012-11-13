@@ -156,7 +156,8 @@ textarea {
 #messages a,
 #boards a,
 #newest a,
-#userlist a {
+#userlist a,
+.posts .actions li {
 	cursor: pointer;
 }
 
