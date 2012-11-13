@@ -204,3 +204,7 @@ label {
 fieldset p {
 	overflow: hidden;
 }
+
+#phishing-info {
+	font-size: 1.5em;
+}

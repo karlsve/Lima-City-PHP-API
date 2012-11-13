@@ -40,6 +40,13 @@
 		<script type="text/javascript" src="js/forum.js"></script>
 	</head>
 	<body>
+		<p id="phishing-info">
+			Der Quellcode dieses Systems ist <a href="https://github.com/karlsve/Lima-City-PHP-API/">hier</a>
+			zu finden. Wer also Angst hat, dass seine Login-Daten geklaut werden k&ouml;nnten kann
+			dort gerne mal vorbeischauen und den Quellcode begutachten, um dann festzustellen, dass nichts
+			gestohlen wird. Der einzige Server dem vertraut werden kann und der mit Sicherheit diese Version
+			der Scripte am Laufen hat ist dort auch aufgelistet.
+		</p>
 		<!-- dialogs -->
 		<div id="loginbox" title="Login">
 			<p>Du musst dich einloggen, um dieses System benutzen zu k&uuml;nnen.</p>
@@ -216,6 +223,10 @@
 									<label for="noQuotePNSetting">Keine Benachrichtigung wenn ich zitiert werde</label>
 									<input type="checkbox" id="noQuotePNSetting" name="noQuotePNSetting" />
 								</p>
+								<p>
+									<label for="noDeletePNSetting">Keine Benachrichtigung wenn Beitr&auml;ge in meinen Themen gel&ouml;scht werden</label>
+									<input type="checkbox" id="noDeletePNSetting" name="noDeletePNSetting" />
+								</p>
 							</fieldset>
 						</div>
 					</div>
@@ -269,6 +280,8 @@
 					<p>
 						Nat&uuml;rlich freuen wir uns immer &uuml;ber Fehlerberichte und Verbesserungsvorschl&auml;ge.
 						Damit diese auch bearbeitet werden k&ouml;nnen, m&uuml;ssen sie gemeldet werden.
+						Bis es eine andere L&ouml;sung gibt muss eine PN entweder an hackyourlife oder an karlsve
+						geschickt werden.
 					</p>
 				</div>
 			</div>

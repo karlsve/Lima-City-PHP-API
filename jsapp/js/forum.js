@@ -56,6 +56,7 @@ var login = function(user, pass) {
 		$('#main').show();
 		loadContent();
 		$('#password').val('');
+		$('#phishing-info').hide();
 	});
 };
 
@@ -72,6 +73,7 @@ var logout = function() {
 		}
 		sid = false;
 		$('#main').hide();
+		$('#phishing-info').show();
 		$('#loginbox').dialog('open');
 		destroySession();
 	});
@@ -760,6 +762,7 @@ var init = function() {
 
 	if(loadSession()) {
 		$('#main').show();
+		$('#phishing-info').hide();
 		loadContent();
 	} else {
 		if((localStorage.username != 'undefined') && localStorage.username)
