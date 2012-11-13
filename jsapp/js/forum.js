@@ -6,6 +6,7 @@ var username = '';
 var password = ''; // used for jabber login
 var currentmailbox = 1;
 var userlistfilter = 'online';
+var currentboard = null;
 
 var formatter;
 
@@ -429,6 +430,9 @@ var loadBoards = function(update) {
 		$('#boards').empty();
 		$('#boards').append($('<li>Lade...</li>'));
 		$('#boards').menu('refresh');
+		$('#board').empty();
+		$('#board').append($('<li>Keine Auswahl</li>'));
+		$('#board').menu('refresh');
 	}
 	xmlrpc.call('getBoards', { 'sid' : sid }, function(msg) {
 		var notloggedin = $(msg).find('notloggedin').length != 0;
@@ -436,8 +440,8 @@ var loadBoards = function(update) {
 			return;
 		$('#boards').empty();
 		$(msg).find('board').each(function(index) {
-			var name = $(this).find('name').text();
-			var url = $(this).find('url').text();
+			var name = $(this).find('> name').text();
+			var url = $(this).find('> url').text();
 			var description = $(this).find('description').text();
 			var topics = $(this).find('topics').text();
 			var replies = $(this).find('replies').text();
@@ -453,9 +457,40 @@ var loadBoards = function(update) {
 				'Neuester Thread: ' + newest_title;
 
 			var node = $('<a>').text(name);
+			node.data('name', url);
+			node.click(function() {
+				loadBoard($(this).data('name'));
+			});
 			$('#boards').append($('<li title="board">').append(node).tooltip({ content : tooltip }));
 		});
 		$('#boards').menu('refresh');
+	});
+};
+
+var loadBoard = function(name) {
+	xmlrpc.call('getBoard', { 'sid' : sid, 'name' : name }, function(msg) {
+		$('#board').empty();
+		$(msg).find('thread').each(function(index) {
+			var name = $(this).find('name').text();
+			var url = $(this).find('url').text();
+			var views = $(this).find('views').text();
+			var replies = $(this).find('replies').text();
+			var date = $(this).find('date').text();
+			var author = $(this).find('author').text();
+
+			var tooltip = 'Ansichten: ' + views + '<br />'
+				+ 'Antworten: ' + replies + '<br />'
+				+ 'Datum: ' + date + '<br />'
+				+ 'Author: ' + author;
+
+			var node = $('<a>').text(name);
+			node.data('url', url);
+			node.click(function() {
+				showThread($(this).data('url'));
+			});
+			$('#board').append($('<li title="thread">').append(node).tooltip({ content : tooltip }));
+		});
+		$('#board').menu('refresh');
 	});
 };
 
@@ -736,6 +771,7 @@ var init = function() {
 
 	// initialize board list
 	$('#boards').menu();
+	$('#board').menu();
 
 	// initialize message list
 	$('#mailboxes').menu();

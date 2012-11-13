@@ -105,15 +105,15 @@ textarea {
 	display: table-cell;
 }
 
-#tab-messages .td {
+#tab-messages .td, #tab-boards .td {
 	padding: 10px;
 }
 
-#tab-messages .td:first-child {
+#tab-messages .td:first-child, #tab-boards .td:first-child {
 	padding-left: 0;
 }
 
-#tab-messages .td:last-child {
+#tab-messages .td:last-child, #tab-boards .td:last-child {
 	padding-right: 0;
 }
 
@@ -155,6 +155,7 @@ textarea {
 #mailboxes a,
 #messages a,
 #boards a,
+#board a,
 #newest a,
 #userlist a,
 .posts .actions li {
