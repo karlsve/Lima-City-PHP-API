@@ -205,6 +205,23 @@ var threadPost = function() {
 	}
 };
 
+var threadWrite = function(quote) {
+	// TODO: load quote data
+};
+
+var reportSpam = function(id) {
+	$('#reportspam textarea.comment').val('');
+	$('#reportspam').data('postid', id);
+	$('#reportspam').dialog('open');
+};
+
+var reportspamfunction = function() {
+	var id = $('#reportspam').data('postid');
+	var comment = $('#reportspam textarea.comment').val();
+	alert('Spamreport for ' + id + ':\n' + comment);
+	$('#reportspam').dialog('close');
+};
+
 var showThread = function(url) {
 	$('#tabs').tabs('select', '#tab-thread');
 	$('#thread-write').hide();
@@ -261,8 +278,18 @@ var showThread = function(url) {
 					stars.append($('<img>').attr('src', starurl));
 				data.push(stars);
 			}
+
+			var actions = $('<ul class="actions">');
+			actions.append($('<li><img src="images/icons/bug.png" /></li>').click(function() {
+				reportSpam(id);
+			}));
+			if(writable == 'true')
+				actions.append($('<li><img src="images/icons/comments.png" /></li>').click(function() {
+					threadWrite(id);
+				}));
+
 			node.append($('<div class="info">').append(data));
-			node.append($('<div class="content">').append(content));
+			node.append($('<div class="content">').append(actions).append(content));
 			node.addClass('ui-widget').addClass('ui-widget-content').addClass('ui-corner-all');
 			if(type == 'deleted')
 				node.addClass('deleted');
@@ -628,6 +655,19 @@ var init = function() {
 	});
 	$('#loginbox form').submit(loginfunction);
 
+	// initialize spam report button
+	$('#reportspam').dialog({
+		autoOpen: false,
+		closeOnEscape: true,
+		modal: true,
+		resizable: false,
+		buttons: {
+			OK : reportspamfunction,
+			Abbrechen : function() {
+				$('#reportspam').dialog('close');
+			}
+		}
+	});
 	// initialize logout button
 	$('#logout').button();
 	$('#logout').click(logout);
