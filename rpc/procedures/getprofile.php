@@ -11,7 +11,10 @@ function rpc_getProfile($xml, $result, $args) {
 	$groups = $xml->createElement('groups');
 	$groups = rpc_getGroupsOfProfile($xml, $groups, $args);
 	$result->appendChild($groups);
+	$guestbook = $xml->createElement('guestbook');
+	$guestbook = rpc_getGuestbookOfProfile($xml, $guestbook, $args);
+	$result->appendChild($guestbook);
 	return $result;
 }
 
-xmlrpc_register_function('getProfile', array('sid', 'user'), 'rpc_getProfile');
+xmlrpc_register_function('getProfile', array('sid', 'user', 'o:page'), 'rpc_getProfile');
