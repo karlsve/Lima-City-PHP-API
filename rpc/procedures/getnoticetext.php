@@ -7,7 +7,7 @@ function rpc_getNoticeText($xml, $result, $args) {
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 
-	$notice = base64_decode($doc->find('p#noticetext1.inner')->html());
+	$notice = base64_decode($doc->find('#noticetext1.inner')->html());
 	$result->appendChild($xml->createElement('notice', $notice));
 	return $result;
 }
