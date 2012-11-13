@@ -544,10 +544,11 @@ var loadNotifications = function() {
 		var notificationcount = 0;
 		var names = {
 			'spam' : 'Spam',
-			'guestbook' : 'G‰stebucheintr‰ge',
+			'guestbook' : 'G√§stebucheintr√§ge',
 			'messages' : 'Nachrichten',
 			'promowall' : 'Banner',
-			'notification' : 'Benachrichtigungen'
+			'notification' : 'Benachrichtigungen',
+			'friendship' : 'Freundschaftsantr√§ge'
 		};
 		var notificationtype = 'none';
 		$(msg).find('notification').each(function(index) {

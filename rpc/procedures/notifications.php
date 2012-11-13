@@ -25,6 +25,9 @@ function rpc_getNotifications($xml, $result, $args) {
 			case '/promowall':
 				$type = 'promowall';
 				break;
+			case '/buddies/#tabAnnehmen':
+				$type = 'friendship';
+				break;
 		}
 		if($type == 'unknown')
 			continue;
