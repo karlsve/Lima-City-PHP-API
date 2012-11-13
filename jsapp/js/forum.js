@@ -98,6 +98,14 @@ var doUpdate = function() {
 	loadUserlist(true);
 };
 
+var showWarning = function(msg) {
+	alert(msg); // TODO: improve
+};
+
+var showInfo = function(msg) {
+	alert(msg); // TODO: improve
+};
+
 var format = function(xml) {
 	var result = [];
 	xml.children().each(function() {
@@ -220,8 +228,20 @@ var reportSpam = function(id) {
 var reportspamfunction = function() {
 	var id = $('#reportspam').data('postid');
 	var comment = $('#reportspam textarea.comment').val();
-	alert('Spamreport for ' + id + ':\n' + comment);
-	$('#reportspam').dialog('close');
+	xmlrpc.call('reportSpam', { 'sid' : sid, 'id' : id, 'comment' : comment}, function(msg) {
+		$('#reportspam').dialog('close');
+		var notloggedin = $(msg).find('notloggedin').length != 0;
+		if(notloggedin) {
+			showWarning('Der Server meldet, dass du nicht eingeloggt bist...');
+			return;
+		}
+
+		var result = $(msg).find('result').text();
+		if(result == 'OK')
+			showInfo('Der Beitrag wurde gemeldet. Danke');
+		else if(result == 'reported')
+			showInfo('Du hast den Beitrag bereits gemeldet.');
+	});
 };
 
 var showThread = function(url) {
