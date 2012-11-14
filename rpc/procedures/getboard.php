@@ -17,6 +17,8 @@ function rpc_getBoard($xml, $result, $args) {
 	foreach($threadlist as $thread) {
 		$thread = pq($thread);
 		$threadxml = $xml->createElement('thread');
+		$closed = $thread->find('img.threadIcon[alt="geschlossen"]')->count() != 0;
+		$fixed = $thread->find('img.threadIcon[alt="fixiert"]')->count() != 0;
 		$threadname = $thread->find('td:nth-child(1) > a');
 		$name = $threadname->html();
 		$url = preg_replace('#.*/#', '', $threadname->attr('href'));
@@ -33,8 +35,12 @@ function rpc_getBoard($xml, $result, $args) {
 		$del = $xml->createAttribute('deleted');
 		$del->appendChild($xml->createTextNode($deleted));
 		$threadauthor->appendChild($del);
+		$flags = $xml->createElement('flags');
+		$flags->appendChild($xml->createElement('closed', $closed ? 'true' : 'false'));
+		$flags->appendChild($xml->createElement('fixed', $fixed ? 'true' : 'false'));
 		$threadxml->appendChild($xml->createElement('name', $name));
 		$threadxml->appendChild($xml->createElement('url', $url));
+		$threadxml->appendChild($flags);
 		$threadxml->appendChild($xml->createElement('views', $views));
 		$threadxml->appendChild($xml->createElement('replies', $replies));
 		$threadxml->appendChild($threadauthor);

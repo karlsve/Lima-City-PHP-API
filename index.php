@@ -1,5 +1,3 @@
-<html>
-	<body>
-		test
-	</body>
-</html>
+<?php
+
+header('location: jsapp/');

@@ -477,17 +477,40 @@ var loadBoard = function(name) {
 			var replies = $(this).find('replies').text();
 			var date = $(this).find('date').text();
 			var author = $(this).find('author').text();
+			var closed = $(this).find('closed').text();
+			var fixed = $(this).find('fixed').text();
 
-			var tooltip = 'Ansichten: ' + views + '<br />'
-				+ 'Antworten: ' + replies + '<br />'
+			var icons = [];
+			var info = '';
+			if(closed == 'true') {
+				icons.push($('<img src="images/icons/lock.png">'));
+				info = 'geschlossen';
+			}
+			if(fixed == 'true') {
+				if(icons.length != 0) {
+					info += ', ';
+					icons.push(document.createTextNode(' '));
+				}
+				icons.push($('<img src="images/icons/lightning.png">'));
+				info += 'fixiert';
+			}
+
+			var tooltip = 'Antworten: ' + replies + '<br />'
+				+ 'Ansichten: ' + views + '<br />'
 				+ 'Datum: ' + date + '<br />'
 				+ 'Author: ' + author;
+			if(icons.length != 0)
+				tooltip += '<br />' + info;
 
 			var node = $('<a>').text(name);
 			node.data('url', url);
 			node.click(function() {
 				showThread($(this).data('url'));
 			});
+			if(icons.length != 0) {
+				node.append(document.createTextNode(' '));
+				node.append(icons);
+			}
 			$('#board').append($('<li title="thread">').append(node).tooltip({ content : tooltip }));
 		});
 		$('#board').menu('refresh');
