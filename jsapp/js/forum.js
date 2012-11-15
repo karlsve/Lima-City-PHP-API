@@ -686,6 +686,27 @@ var loadStatus = function(update) {
 	});
 };
 
+var searchUser = function(username) {
+	$('#user-search-result').empty();
+	$('#user-search-result').append($('<li>Suche...</li>'));
+	$('#user-search-result').menu('refresh');
+	xmlrpc.call('searchUser', { 'username' : username }, function(msg) {
+		$('#user-search-result').empty();
+		$(msg).find('user').each(function() {
+			var name = $(this).text();
+			var node = $('<li title="user">').append($('<a>').text(name));
+			xmlrpc.call('getUserID', { 'username' : name }, function(msg) {
+				var id = $(msg).text();
+				node.tooltip({ content : 'User-ID: ' + id });
+			});
+			$('#user-search-result').append(node);
+		});
+		if($(msg).find('user').length == 0)
+			$('#user-search-result').append($('<li>Kein Treffer</li>'));
+		$('#user-search-result').menu('refresh');
+	});
+};
+
 var loadContent = function() {
 	loadHomescreen();
 	loadBoards();
@@ -789,6 +810,26 @@ var init = function() {
 	$('#messagereader button.back').button();
 	$('#messagereader button.back').click(showMessageList);
 
+	// initialize buttons on "tools" page
+	$('#show-session-id').button();
+	$('#hide-session-id').button();
+	$('#user-search-button').button();
+	$('#show-session-id').click(function() {
+		$('#show-session-id').hide();
+		$('#hide-session-id').show();
+		$('#session-id').text(sid);
+		$('#session-id').show();
+	});
+	$('#hide-session-id').click(function() {
+		$('#show-session-id').show();
+		$('#hide-session-id').hide();
+		$('#session-id').hide();
+	});
+	$('#user-search-button').click(function() {
+		var username = $('#user-search-name').val();
+		searchUser(username);
+	});
+
 	// initialize newest threads list
 	$('#newest').menu();
 
@@ -802,6 +843,10 @@ var init = function() {
 
 	// initialize user list
 	$('#userlist').menu();
+
+	// initialize user search list
+	$('#user-search-result').append($('<li>Kein Ergbenis</li>'));
+	$('#user-search-result').menu();
 
 	// initialize tabs
 	$('#tabs').tabs();
@@ -837,6 +882,8 @@ var init = function() {
 	$('#thread-write').hide();
 	$('#thread-write-enable').hide();
 	$('#messagereader').hide();
+	$('#hide-session-id').hide();
+	$('#session-id').hide();
 
 	updater();
 

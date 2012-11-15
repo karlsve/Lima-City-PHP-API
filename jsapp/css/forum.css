@@ -18,6 +18,7 @@ pre {
 	background: rgba(0, 0, 0, 0.5);
 	padding: 1%;
 	width: 98%;
+	overflow: auto;
 }
 
 textarea {
@@ -158,6 +159,7 @@ textarea {
 #board a,
 #newest a,
 #userlist a,
+#user-search-result a,
 .posts .actions li {
 	cursor: pointer;
 }

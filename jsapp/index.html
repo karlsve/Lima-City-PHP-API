@@ -95,6 +95,7 @@
 					<li><a href="#tab-users"><span>Benutzer</span></a></li>
 					<li><a href="#tab-chat"><span>Chat</span></a></li>
 					<li><a href="#tab-status"><span>Server-Status</span></a></li>
+					<li><a href="#tab-tools"><span>Tools</span></a></li>
 					<li><a href="#tab-help"><span>Hilfe</span></a></li>
 				</ul>
 				<div id="tab-homepage">
@@ -247,6 +248,22 @@
 				<div id="tab-status">
 					<p>Hier siehst du sofort wenn ein Server ausf&auml;llt oder langsam ist.</p>
 					<div id="status"></div>
+				</div>
+				<div id="tab-tools">
+					<h2>Tools</h2>
+					<fieldset>
+						<legend>Informationen</legend>
+						<p>Session ID: <span id="session-id"></span> <button id="hide-session-id">verstecken</button><button id="show-session-id">anzeigen</button></p>
+					</fieldset>
+					<fieldset>
+						<legend>Benutzersuche</legend>
+						<p>
+							<label for="user-search-name">Benutzername</label>
+							<input type="text" name="user-search-name" id="user-search-name" />
+							<button id="user-search-button">Suchen</button>
+						</p>
+						<ul id="user-search-result"></ul>
+					</fieldset>
 				</div>
 				<div id="tab-help">
 					<h2>Lima-City-Hilfe</h2>
