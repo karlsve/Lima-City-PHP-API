@@ -184,7 +184,14 @@ var format = function(xml) {
 				var url = $(this).find('url').text();
 				var alt = $(this).find('raw').text();
 				var node = document.createElement('img');
-				$(node).attr('src', 'http://latex.codecogs.com/png.latex?\\color{white}{' + url + '}');
+				var latex = '\\color{white}{' + url + '}';
+				var type = 'png';
+				if(url.indexOf('textcolor') != -1) {
+					latex = url;
+					type = 'gif';
+					$(node).css('background', 'white');
+				}
+				$(node).attr('src', 'http://latex.codecogs.com/' + type + '.latex?' + latex);
 				$(node).attr('alt', alt);
 				result.push(node);
 				break;
@@ -263,10 +270,10 @@ var showThread = function(url) {
 		$('#thread-write').hide();
 		writable ? $('#thread-write-enable').show() : $('#thread-write-enable').hide();
 		$(msg).find('posts > post').each(function(index) {
-			var type = $(this).find('type').text();
-			var date = $(this).find('date').text();
-			var id = $(this).find('id').text();
-			var userdata = $(this).find('user');
+			var type = $(this).find('> type').text();
+			var date = $(this).find('> date').text();
+			var id = $(this).find('> id').text();
+			var userdata = $(this).find('> user');
 			var user = userdata.text();
 			var userdeleted = userdata.attr('deleted');
 			var author = userdata.attr('author');
@@ -276,7 +283,8 @@ var showThread = function(url) {
 			var role = userdata.attr('role');
 			var online = userdata.attr('online');
 			var starcount = userdata.attr('starcount');
-			var content = format($(this).find('content'));
+			var content = format($(this).find('> content'));
+			var signature = $(this).find('signature > content').length != 0 ? format($(this).find('signature > content')) : false;
 
 			var node = $('<li>');
 			var userinfo = document.createTextNode(user);
@@ -319,7 +327,12 @@ var showThread = function(url) {
 				}));
 
 			node.append($('<div class="info">').append(data));
-			node.append($('<div class="content">').append(actions).append(content));
+
+			var contentnode = $('<div class="content">');
+			contentnode.append(actions).append(content);
+			if(signature != false)
+				contentnode.append($('<div class="signature">').append(signature));
+			node.append(contentnode);
 			node.addClass('ui-widget').addClass('ui-widget-content').addClass('ui-corner-all');
 			if(type == 'deleted')
 				node.addClass('deleted');

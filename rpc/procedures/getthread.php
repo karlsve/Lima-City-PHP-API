@@ -78,6 +78,9 @@ function getPost($xml, $post) {
 	}
 
 	$contentdiv = $post->find('div.content');
+	$signaturexml = $xml->createElement('signature');
+	if($contentdiv->find('div.signature')->count() != 0)
+		$signaturexml->appendChild(parsePostContent($xml, trim($contentdiv->find('div.signature')->html())));
 	$contentdiv->find('ul.actions')->remove();
 	$contentdiv->find('p.clearing')->remove();
 	$contentdiv->find('div.signature')->remove();
@@ -128,6 +131,7 @@ function getPost($xml, $post) {
 	$root->appendChild($postidxml);
 	$root->appendChild($userxml);
 	$root->appendChild($contentxml);
+	$root->appendChild($signaturexml);
 
 	return($root);
 }

@@ -30,7 +30,7 @@ function parseContent($xml, $doc) {
 			$result->appendChild($typexml);
 			$result->appendChild($urlxml);
 		} else {
-			if(preg_match('#(http|https|ftp|ftps|sftp)://#', $url) == 0)
+			if(preg_match('#^(http|https|ftp|ftps|sftp)://#', $url) == 0)
 				$url = ($url[0] == '/') ? "https://www.lima-city.de$url" : "https://www.lima-city.de/$url";
 			$result = $xml->createElement('link');
 			$urlxml = $xml->createAttribute('url');
@@ -48,7 +48,7 @@ function parseContent($xml, $doc) {
 	if($doc->tagName == 'img') {
 		$src = $doc->attributes->getNamedItem('src')->value;
 		$alt = $doc->attributes->getNamedItem('alt')->value;
-		if(preg_match('#(http|https|ftp|ftps|sftp)://#', $src) == 0) {
+		if(preg_match('#^(http|https|ftp|ftps|sftp)://#', $src) == 0) {
 			if($src[0] != '/')
 				$src = '/' . $src;
 			if((strlen($src) > 7) && (substr($src, 0, 7) == '/math/?')) {

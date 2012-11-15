@@ -75,6 +75,13 @@ textarea {
 	background: rgba(128, 128, 128, 0.5);
 }
 
+.posts .content .signature {
+	border-top: 1px solid #ccc;
+	margin-top: 1em;
+	padding-top: 1em;
+	font-size: 90%;
+}
+
 .actions {
 	float: right;
 	list-style: none;
