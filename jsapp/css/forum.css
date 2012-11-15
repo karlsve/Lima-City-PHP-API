@@ -67,6 +67,10 @@ textarea {
 	width: 75%;
 }
 
+.posts .info img {
+	margin-bottom: -4px;
+}
+
 .posts li.deleted {
 	background: rgba(128, 128, 128, 0.5);
 }
@@ -211,3 +215,4 @@ fieldset p {
 #phishing-info {
 	font-size: 1.5em;
 }
+

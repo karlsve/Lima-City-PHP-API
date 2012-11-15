@@ -41,6 +41,7 @@ function getPost($xml, $post) {
 	$postid = $dateelement->find('a')->attr('name');
 	$userelement = $authordiv->find('p.un');
 	$postauthor = $userelement->find('a')->html();
+	$authoronline = $userelement->find('img')->attr('alt') == 'Online';
 	$postauthordeleted = 'false';
 	if(strlen($postauthor) == 0) {
 		$postauthordeleted = 'true';
@@ -100,6 +101,9 @@ function getPost($xml, $post) {
 	$te = $xml->createAttribute('author');
 	$te->appendChild($xml->createTextNode($isauthor ? 'true' : 'false'));
 	$userxml->appendChild($te);
+	$online = $xml->createAttribute('online');
+	$online->appendChild($xml->createTextNode($authoronline ? 'true' : 'false'));
+	$userxml->appendChild($online);
 	if($postauthordeleted == 'false') {
 		$avatarxml = $xml->createAttribute('avatar');
 		$avatarxml->appendChild($xml->createTextNode($avatar));

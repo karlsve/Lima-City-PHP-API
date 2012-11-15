@@ -274,6 +274,7 @@ var showThread = function(url) {
 			var gulden = userdata.attr('gulden');
 			var rank = userdata.attr('rank');
 			var role = userdata.attr('role');
+			var online = userdata.attr('online');
 			var starcount = userdata.attr('starcount');
 			var content = format($(this).find('content'));
 
@@ -282,7 +283,13 @@ var showThread = function(url) {
 			if(userdeleted == 'true')
 				userinfo = $('<del>').text(user);
 			var data = [];
-			data.push($('<p class="username">').append(userinfo));
+			var onlinetext = online == 'true' ? 'online' : 'offline';
+			data.push($('<p class="username">')
+					.append($('<img>')
+						.attr('src', 'images/icons/user_' + onlinetext + '.png')
+						.attr('alt', onlinetext)
+						.attr('title', onlinetext)
+					).append(userinfo));
 			data.push($('<p class="date">').text(date));
 			data.push($('<p class="limalink"><a href="https://www.lima-city.de/board/action%3Ajump/' + id + '" target="_blank">@lima-city</a></p>'));
 			if(author == 'true')
