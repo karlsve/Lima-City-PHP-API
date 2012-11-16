@@ -25,15 +25,20 @@ function lima_login($username, $password) {
 function rpc_login($xml, $result, $args) {
 	$login = lima_login($args->username, $args->password);
 	// error code
-	$error = 'OK';
+	$output = 'true';
 	if($login === false)
-		$error = 'error';
+		$output = 'false';
 	if($login === 0)
-		$error = 'password';
-	$result->appendChild($xml->createElement('result', $error));
+	{
+		$output = 'false';
+		$error = 'Incorrect password.';
+	}
+	$result->appendChild($xml->createElement('loggedin', $output));
 	// session identifier
-	if($error === 'OK')
+	if($output == 'true')
 		$result->appendChild($xml->createElement('session', $login));
+	else
+		$result->appendChild($xml->createElement('error', $error));
 	return $result;
 }
 
