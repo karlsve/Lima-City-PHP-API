@@ -569,6 +569,13 @@ var loadMessages = function(update, mailboxid) {
 			$('#mailboxes').empty();
 			$('#mailboxes').append($('<li>Lade...</li>'));
 			$('#mailboxes').menu('refresh');
+		} else {
+			$('#mailboxes > li').removeClass('ui-state-active').removeClass('ui-corner-all');
+			$('#mailboxes > li').each(function(index) {
+				var id = $(this).find('> a').data('id');
+				if(id == mailboxid)
+					$(this).addClass('ui-state-active').addClass('ui-corner-all');
+			});
 		}
 		$('#messages').empty();
 		$('#messages').append($('<li>Lade...</li>'));
@@ -623,8 +630,9 @@ var loadMessages = function(update, mailboxid) {
 					var id = $(this).find('id').text();
 
 					var node = $('<a>').text(title);
+					node.data('id', id);
 					node.click(function() {
-						loadMessages(false, id);
+						loadMessages(false, $(this).data('id'));
 					});
 					var li = $('<li>').append(node);
 					if(id == mbox)
