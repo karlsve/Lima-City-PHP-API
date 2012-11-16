@@ -505,6 +505,15 @@ var loadBoards = function(update) {
 };
 
 var loadBoard = function(name) {
+	$('#board').empty();
+	$('#board').append($('<li>Lade...</li>'));
+	$('#board').menu('refresh');
+	$('#boards > li').removeClass('ui-state-active').removeClass('ui-corner-all');
+	$('#boards > li').each(function(index) {
+		var url = $(this).find('> a').data('name');
+		if(url == name)
+			$(this).addClass('ui-state-active').addClass('ui-corner-all');
+	});
 	xmlrpc.call('getBoard', { 'sid' : sid, 'name' : name }, function(msg) {
 		$('#board').empty();
 		$(msg).find('thread').each(function(index) {
