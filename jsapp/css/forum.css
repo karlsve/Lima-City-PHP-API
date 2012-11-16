@@ -197,6 +197,14 @@ dd {
 	height: 100%;
 }
 
+#bugreport input[type="text"] {
+	width: 100%;
+}
+
+#bugreport textarea.comment {
+	width: 100%;
+	height: 80%;
+}
 
 fieldset {
 	clear: left;

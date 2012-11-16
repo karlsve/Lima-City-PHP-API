@@ -66,6 +66,12 @@
 			<p>Begr&uuml;ndung (optional):</p>
 			<textarea class="comment"></textarea>
 		</div>
+		<!--
+		<div id="bugreport" title="Bugreport erstellen">
+			<p><input type="text" id="bugreport-title" placeholder="Titel" /></p>
+			<textarea class="comment"></textarea>
+		</div>
+		-->
 		<!-- infos / warnings / errors -->
 		<div id="passworderror" class="ui-widget">
 			<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
@@ -253,7 +259,7 @@
 					<h2>Tools</h2>
 					<fieldset>
 						<legend>Informationen</legend>
-						<p>Session ID: <span id="session-id"></span> <button id="hide-session-id">verstecken</button><button id="show-session-id">anzeigen</button></p>
+						<p>Session ID: <button id="hide-session-id">verstecken</button><button id="show-session-id">anzeigen</button> <span id="session-id"></span></p>
 					</fieldset>
 					<fieldset>
 						<legend>Benutzersuche</legend>
@@ -306,6 +312,7 @@
 						Damit diese auch bearbeitet werden k&ouml;nnen, m&uuml;ssen sie gemeldet werden.
 						Bis es eine andere L&ouml;sung gibt muss eine PN entweder an hackyourlife oder an karlsve
 						geschickt werden.
+						<!--<p><button id="createbugreport">Bugreport erstellen</button></p>-->
 					</p>
 				</div>
 			</div>

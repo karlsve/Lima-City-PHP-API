@@ -252,6 +252,23 @@ var reportspamfunction = function() {
 	});
 };
 
+var createBugReport = function() {
+	$('#bugreport-title').val('');
+	$('#bugreport textarea.comment').val('');
+	$('#bugreport').dialog('open');
+};
+
+var createbugreportfunction = function() {
+	var title = $('#bugreport-title').val().trim();
+	var body = $('#bugreport textarea.comment').val().trim();
+	if(title.length == 0 || body.length == 0)
+		return;
+	xmlrpc.call('createBugReport', { 'title' : title, 'body' : body }, function(msg) {
+		$('#bugreport').close();
+		showInfo('Der Bugreport wurde abgeschickt');
+	});
+};
+
 var showThread = function(url) {
 	$('#tabs').tabs('select', '#tab-thread');
 	$('#thread-write').hide();
@@ -793,6 +810,26 @@ var init = function() {
 	// initialize logout button
 	$('#logout').button();
 	$('#logout').click(logout);
+
+	/*
+	// initialize bug report dialog
+	$('#bugreport').dialog({
+		autoOpen: false,
+		closeOnEscape: false,
+		modal: false,
+		resizable: true,
+		height: 400,
+		width: 400,
+		buttons: {
+			OK : createbugreportfunction,
+			Abbrechen : function() {
+				$('#bugreport').dialog('close');
+			}
+		}
+	});
+	$('#createbugreport').button();
+	$('#createbugreport').click(createBugReport);
+	*/
 
 	// initialize webspace button
 	$('#webspace').button();
