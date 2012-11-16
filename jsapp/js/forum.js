@@ -38,14 +38,14 @@ var login = function(user, pass) {
 	if(user.length == 0 || pass.length == 0)
 		return;
 	xmlrpc.call('login', { 'username' : user, 'password' : pass }, function(msg) {
-		var errorcode = $(msg).find('errorcode').text();
-		if(errorcode == 'passwd') {
+		var errorcode = $(msg).find('error').text();
+		if(errorcode == 'password') {
 			$('#passworderror').show();
 			return;
 		}
 		$('#passworderror').hide();
 		var error = $(msg).find('result').text();
-		if(error != 'OK') {
+		if($(msg).find('loggedin').text() != 'true') {
 			sid = false;
 			return;
 		}
