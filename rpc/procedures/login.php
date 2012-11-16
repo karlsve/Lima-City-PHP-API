@@ -31,7 +31,7 @@ function rpc_login($xml, $result, $args) {
 	if($login === 0)
 	{
 		$output = 'false';
-		$error = 'Incorrect password.';
+		$error = 'password';
 	}
 	$result->appendChild($xml->createElement('loggedin', $output));
 	// session identifier
