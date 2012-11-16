@@ -26,7 +26,7 @@ function rpc_login($xml, $result, $args) {
 	$login = lima_login($args->username, $args->password);
 	// error code
 	$output = 'true';
-	$error = 'unknown'
+	$error = 'unknown';
 	if($login === false)
 		$output = 'false';
 	if($login === 0)
