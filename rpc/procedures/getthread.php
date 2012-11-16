@@ -20,7 +20,7 @@ function rpc_getThread($xml, $result, $args) {
 	$closed = $doc->find('ul.actions li img[src="/images/layout/icons/lock.png"]')->count() != 0;
 	$result->appendChild($xml->createElement('closed', $closed ? 'true' : 'false'));
 
-	$name = $doc->find('h2')->get(0)->nodeValue;
+	$name = htmlspecialchars($doc->find('h2')->get(0)->nodeValue);
 	$result->appendChild($xml->createElement('name', $name));
 
 	$result->appendChild($xml->createElement('url', $args->url));
