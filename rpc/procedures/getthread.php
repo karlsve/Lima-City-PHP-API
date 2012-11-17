@@ -81,6 +81,22 @@ function getPost($xml, $post) {
 	$signaturexml = $xml->createElement('signature');
 	if($contentdiv->find('div.signature')->count() != 0)
 		$signaturexml->appendChild(parsePostContent($xml, trim($contentdiv->find('div.signature')->html())));
+
+	$actions = $contentdiv->find('ul.actions > li');
+	$actionsxml = $xml->createElement('actions');
+	$actionedit = $xml->createElement('edit', $actions->find('a[title="Bearbeiten"]')->count() != 0 ? 'true' : 'false');
+
+	$deleteelement = $actions->find('a[href^="/reply/action%3Adelete/"]');
+	$actiondelete = $xml->createElement('delete', $deleteelement->count() != 0 ? 'true' : 'false');
+	if($deleteelement->count() != 0) {
+		$deletecode = str_replace("/reply/action%3Adelete/$postid/", '', $deleteelement->attr('href'));
+		$deleteattribute = $xml->createAttribute('code');
+		$deleteattribute->appendChild($xml->createTextNode($deletecode));
+		$actiondelete->appendChild($deleteattribute);
+	}
+	$actionsxml->appendChild($actionedit);
+	$actionsxml->appendChild($actiondelete);
+
 	$contentdiv->find('ul.actions')->remove();
 	$contentdiv->find('p.clearing')->remove();
 	$contentdiv->find('div.signature')->remove();
@@ -129,6 +145,7 @@ function getPost($xml, $post) {
 	$root->appendChild($typexml);
 	$root->appendChild($datexml);
 	$root->appendChild($postidxml);
+	$root->appendChild($actionsxml);
 	$root->appendChild($userxml);
 	$root->appendChild($contentxml);
 	$root->appendChild($signaturexml);
