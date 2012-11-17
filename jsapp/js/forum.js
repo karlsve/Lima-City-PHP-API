@@ -1,7 +1,7 @@
 (function() {
 
 var sid = false;
-var xmlrpcurl = '../api/';
+var auth = false;
 var username = '';
 var password = ''; // used for jabber login
 var currentmailbox = 1;
@@ -50,6 +50,7 @@ var login = function(user, pass) {
 			return;
 		}
 		sid = $(msg).find('session').text();
+		auth = $(msg).find('auth').text();
 		setUsername(user);
 		setPassword(pass);
 		saveSession();
@@ -779,12 +780,14 @@ var loadSession = function() {
 	username = localStorage.username;
 	password = sessionStorage.password;
 	sid = sessionStorage.sid;
+	auth = sessionStorage.auth;
 	return true;
 };
 
 var saveSession = function() {
 	localStorage.username = username;
 	sessionStorage.sid = sid;
+	sessionStorage.auth = auth;
 };
 
 var destroySession = function() {
