@@ -294,6 +294,9 @@ var showThread = function(url) {
 			var userdata = $(this).find('> user');
 			var user = userdata.text();
 			var userdeleted = userdata.attr('deleted');
+			var actiondelete = $(this).find('actions > delete').text();
+			var deletecode = $(this).find('actions > delete').attr('code');
+			var actionedit = $(this).find('actions > edit').text();
 			var author = userdata.attr('author');
 			var avatar = userdata.attr('avatar');
 			var gulden = userdata.attr('gulden');
@@ -336,11 +339,19 @@ var showThread = function(url) {
 			}
 
 			var actions = $('<ul class="actions">');
-			actions.append($('<li><img src="images/icons/bug.png" /></li>').click(function() {
+			if(actionedit == 'true')
+				actions.append($('<li><img src="images/icons/page_edit.png" alt="Bearbeiten" title="Bearbeiten" /></li>').click(function() {
+					editPost(id);
+				}));
+			if(actiondelete == 'true')
+				actions.append($('<li><img src="images/icons/cross.png" alt="L&ouml;schen" title="L&ouml;schen" /></li>').click(function() {
+					deletePost(id, deletecode);
+				}));
+			actions.append($('<li><img src="images/icons/bug.png" alt="Beitrag melden" title="Beitrag melden" /></li>').click(function() {
 				reportSpam(id);
 			}));
 			if(writable == 'true')
-				actions.append($('<li><img src="images/icons/comments.png" /></li>').click(function() {
+				actions.append($('<li><img src="images/icons/comments.png" alt="Zitieren" title="Zitieren" /></li>').click(function() {
 					threadWrite(id);
 				}));
 
