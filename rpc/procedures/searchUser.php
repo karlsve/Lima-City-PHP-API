@@ -2,7 +2,7 @@
 
 function rpc_searchUser($xml, $result, $args) {
 	global $url_usersearch;
-	$data = post_request($url_usersearch, array('username' => $args->username));
+	$data = post_request_cookie($url_usersearch, array('username' => $args->username), "sid={$args->sid}");
 	if(strlen($data) > 0) {
 		$users = explode("\n", $data);
 		foreach($users as $user) {
@@ -14,4 +14,4 @@ function rpc_searchUser($xml, $result, $args) {
 	return $result;
 }
 
-xmlrpc_register_function('searchUser', array('username'), 'rpc_searchUser');
+xmlrpc_register_function('searchUser', array('username', 'sid'), 'rpc_searchUser');

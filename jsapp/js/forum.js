@@ -756,7 +756,7 @@ var searchUser = function(username) {
 	$('#user-search-result').empty();
 	$('#user-search-result').append($('<li>Suche...</li>'));
 	$('#user-search-result').menu('refresh');
-	xmlrpc.call('searchUser', { 'username' : username }, function(msg) {
+	xmlrpc.call('searchUser', { 'username' : username, 'sid' : sid }, function(msg) {
 		$('#user-search-result').empty();
 		$(msg).find('user').each(function() {
 			var name = $(this).text();
