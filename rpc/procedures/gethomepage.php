@@ -20,7 +20,7 @@ function rpc_getHomepage($xml, $result, $args) {
 	$result->appendChild($modules);
 
 	if(
-	    (array_search('newsest', $config) !== false)
+	    (array_search('newest', $config) !== false)
 	    || (array_search('noreply', $config) !== false)) {
 		$data['hasthreads'] = true;
 		$data['threads'] = getHomepageThreads($xml, $result, $doc);
