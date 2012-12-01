@@ -111,3 +111,18 @@ function get_request_raw($url, $cookie = '') {
 
 	return(array('header' => $header, 'content' => $data));
 }
+
+
+function get_location($url) {
+	$curl = curl_init($url);
+	curl_setopt($curl, CURLOPT_BINARYTRANSFER, true);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER , true);
+	curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1');
+	curl_setopt($curl, CURLOPT_HEADER, false);
+	curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+	curl_exec($curl);
+	$location = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
+	curl_close($curl);
+	return($location);
+}

@@ -2,11 +2,20 @@
 
 function rpc_getThread($xml, $result, $args) {
 	global $url_thread;
-	$url = "$url_thread/{$args->url}/page%3A0/perpage%3A100";
+	$page = isset($args->page) ? intVal($args->page) : 0;
+	$url = "$url_thread/{$args->url}/page%3A$page/perpage%3A100";
 	$doc = phpQuery::newDocument(get_request_cookie($url, "sid={$args->sid}"));
 	addToCache($url, $doc, "sid={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
+
+	$pages = 1;
+	$a = $doc->find('ol.pageNav li:last-child a');
+	if($a->count() != 0) {
+		preg_match('|/page%3A([0-9]+)/perpage%3A[0-9]+$|', $a->attr('href'), $match);
+		$pages = $match[1];
+	}
+	$result->appendChild($xml->createElement('pages', $pages));
 
 	$posts = $doc->find('ol.posts li:has(.author)');
 
@@ -141,7 +150,11 @@ function getPost($xml, $post) {
 		$userxml->appendChild($starcountxml);
 	}
 
+	$id = $xml->createAttribute('id');
+	$id->appendChildNode($xml->createTextNode($postid));
+
 	$root = $xml->createElement('post');
+	$root->appendChild($id);
 	$root->appendChild($typexml);
 	$root->appendChild($datexml);
 	$root->appendChild($postidxml);
@@ -153,4 +166,4 @@ function getPost($xml, $post) {
 	return($root);
 }
 
-xmlrpc_register_function('getThread', array('sid', 'url'), 'rpc_getThread');
+xmlrpc_register_function('getThread', array('sid', 'url', 'o:page'), 'rpc_getThread');
