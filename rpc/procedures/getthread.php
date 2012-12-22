@@ -151,7 +151,7 @@ function getPost($xml, $post) {
 	}
 
 	$id = $xml->createAttribute('id');
-	$id->appendChildNode($xml->createTextNode($postid));
+	$id->appendChild($xml->createTextNode($postid));
 
 	$root = $xml->createElement('post');
 	$root->appendChild($id);
