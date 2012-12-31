@@ -3,7 +3,8 @@
 function rpc_getThread($xml, $result, $args) {
 	global $url_thread;
 	$page = isset($args->page) ? intVal($args->page) : 0;
-	$url = "$url_thread/{$args->url}/page%3A$page/perpage%3A100";
+	$perpage = isset($args->perpage) ? intVal($args->perpage) : 100;
+	$url = "$url_thread/{$args->url}/page%3A$page/perpage%3A$perpage";
 	$doc = phpQuery::newDocument(get_request_cookie($url, "sid={$args->sid}"));
 	addToCache($url, $doc, "sid={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
@@ -166,4 +167,4 @@ function getPost($xml, $post) {
 	return($root);
 }
 
-xmlrpc_register_function('getThread', array('sid', 'url', 'o:page'), 'rpc_getThread');
+xmlrpc_register_function('getThread', array('sid', 'url', 'o:page', 'o:perpage'), 'rpc_getThread');
