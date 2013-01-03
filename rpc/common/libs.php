@@ -18,5 +18,6 @@ $url_keepalive	= 'https://www.lima-city.de/ajax_keepalive';
 $url_getuserid	= 'https://www.lima-city.de/ajax_check_username';
 $url_usersearch	= 'https://www.lima-city.de/ajax_usersearch';
 $url_status	= 'http://lima-status.de/';
+$url_domains = 'http://www.lima-city.de/domains';
 
 require_once('phpQuery/phpQuery.php');

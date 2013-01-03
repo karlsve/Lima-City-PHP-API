@@ -38,7 +38,7 @@ function rpc_login($xml, $result, $args) {
 	// error code
 	$output = 'true';
 	$error = 'unknown';
-	if($login === false)
+	if($login->success === false)
 		$output = 'false';
 	if($login === 0) {
 		$output = 'false';
