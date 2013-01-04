@@ -8,7 +8,9 @@ function rpc_getNoticeText($xml, $result, $args) {
 		return $result;
 
 	$notice = base64_decode(substr($doc->find('#noticetext1.inner')->html(), 4));
-	$result->appendChild($xml->createElement('notice', $notice));
+	$noticexml = $xml->createElement('notice');
+	$noticexml->appendChild($xml->createCDATASection($notice));
+	$result->appendChild($noticexml);
 	return $result;
 }
 
