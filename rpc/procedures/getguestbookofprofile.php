@@ -10,52 +10,79 @@ function rpc_getGuestbookOfProfile($xml, $result, $args) {
 	addToCache($url, $doc, "sid={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
-	
-	$entries = $doc->find('ol#guestbook > li');
-	foreach($entries as $entry) {
+
+	$guestbook = $doc->find('ol#guestbook');
+	$pieces = array(
+		0 => 'name',
+		1 => 'none',
+		2 => 'gulden',
+		3 => 'none'
+		);
+
+	$guestbook->find('ul.actions')->remove();
+	$guestbook->find('div.replyBox')->remove();
+	$guestbook->find('p.successBox')->remove();
+
+	foreach($guestbook->find('li') as $entry) {
+		$guestbookentry = $xml->createElement('entry');
+
 		$entry = pq($entry);
-		$entryxml = $xml->createElement('entry');
-		$author = $entry->find('div.author p.un a')->html();
-		$date = $entry->find('div.author small a')->html();
-		$entryxml->appendChild($xml->createElement('author', $author));
-		$entryxml->appendChild($xml->createElement('date', $date));
-		$entrycontent = $entry->find('div.content');
-		$pieces = $entrycontent->children();
-		foreach($pieces as $piece) {
+
+		$authordiv = $entry->find('div.author');
+		$author = $authordiv->find('p.un');
+		$date = $authordiv->find('small');
+		dom2plaintext($date);
+		$datexml = $xml->createElement('date', trim($date->html()));
+		$guestbookentry->appendChild($datexml);
+
+		$authorxml = $xml->createElement('author');
+		$guestbookentry->appendChild($authorxml);
+
+		$signature = pq($entry->find('div.signature'));
+		$left = $signature->find('div.left');
+		$right = $signature->find('div.right');
+		$sig = '';
+		if($left)
+			$sig = $left->html();
+		if($right)
+			$sig .= ' ' . $right->html();
+		$sig = trim($sig);
+
+		$signature->remove();
+
+		$j = 0;
+		foreach($entry->find('p:not(.sucessBox)') as $piece) {
 			$piece = pq($piece);
-			if($piece->is('div.signature')) {
-				$signaturexml = $xml->createElement('signature');
-				
-				$sigpieces = $piece->find('div');
-				foreach($sigpieces as $sigpiece) {
-					$sigpiece = pq($sigpiece);
-					$sigpiecexml = $xml->createElement($sigpiece->attr('class'));
-					$signature = $sigpiece->find('a')->html();
-					$goto = preg_replace('|\/.*\/|', '', $sigpiece->find('a')->attr('href'));
-					$sigpiecexml->appendChild($xml->createElement('text', $signature));
-					$sigpiecexml->appendChild($xml->createElement('goto', $goto));
-					$signaturexml->appendChild($sigpiecexml);
-				}
-				$entryxml->appendChild($signaturexml);
-				$piece->remove();
-			} elseif($piece->is('img')) {
-				$piece->after($piece->attr('alt'));
-				$piece->remove();
-			} elseif($piece->is('p.successBox')) {
-				$piece->remove();
-			} elseif($piece->is('ul')) {
-				$piece->remove();
-			} elseif($piece->is('div')) {
-				$piece->remove();
-			} elseif($piece->is('br')) {
-				$piece->after('\n');
-				$piece->remove();
+			dom2plaintext($piece);
+			if($pieces[$j] != 'none') {
+				if($pieces[$j] == 'name') {
+					$name = trim($piece->html());
+					$deleted = 'false';
+					if(preg_match('|<del>(.*?)</del>|', $name, $match)) {
+						$name = $match[1];
+						$deleted = 'true';
+					}
+					$piece = $xml->createElement($pieces[$j], $name);
+					$del = $xml->createAttribute('deleted');
+					$del->appendChild($xml->createTextNode($deleted));
+					$authorxml->appendChild($del);
+				} else
+					$piece = $xml->createElement($pieces[$j], trim($piece->html()));
+				$authorxml->appendChild($piece);
 			}
+			$j++;
 		}
-		$content = trim(preg_replace('!<.*?>!', "", $entrycontent->html()));
-		$entryxml->appendChild($xml->createElement('content', $content));
-		$result->appendChild($entryxml);
+		$content = $entry->find('div.content');
+		$data = trim($content->html());
+		if(strlen($sig) != 0)
+			$data .= '<br>' . $sig;
+		$contentxml = parsePostContent($xml, trim($data));
+
+		//$contentxml = $xml->createElement("content", trim($content->html()));
+		$guestbookentry->appendChild($contentxml);
+		$result->appendChild($guestbookentry);
 	}
+
 	return $result;
 }
 
