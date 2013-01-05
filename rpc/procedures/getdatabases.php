@@ -18,12 +18,14 @@ function rpc_getDatabases($xml, $result, $args) {
 
 	foreach($databases as $db) {
 		$db = pq($db);
-		$name = $db->find('h4 span')->html();
+		$name = $db->find('h4 > span')->html();
+		$comment = $db->find('h4 em span')->html();
 		preg_match('|^/databases/action:clear/id:([0-9]+)/code:([0-9a-zA-Z]+)$|', $db->find('ul.actions a')->attr('href'), $match);
 		$id = $match[1];
 
 		$database = $xml->createElement('database');
 		$database->appendChild($xml->createElement('name', $name));
+		$database->appendChild($xml->createElement('comment', $comment));
 		$database->appendChild($xml->createElement('id', $id));
 		$result->appendChild($database);
 	}
