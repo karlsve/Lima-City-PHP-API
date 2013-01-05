@@ -4,11 +4,23 @@ function rpc_getDomains($xml, $result, $args) {
 	global $url_domains;
 
 	$types = array(
-		'Aufgeschaltet'	=> 'overplugged',
-		'Bearbeiten'	=> 'edit',
-		'Löschen'	=> 'delete'
+		'Aufgeschaltet'		=> 'overplugged',
+		'Bearbeiten'		=> 'edit',
+		'Löschen'		=> 'delete'
 	);
-	
+
+	$infotypes = array(
+		'Pfad:'			=> 'path',
+		'Document Root:'	=> 'docroot',
+		'Register globals:'	=> 'register-globals',
+		'Datum:'		=> 'date'
+	);
+
+	$onoffreplacement = array(
+		'an'			=> 'on',
+		'aus'			=> 'off'
+	);
+
 	$doc = phpQuery::newDocument(get_request_cookie($url_domains, "sid={$args->sid}"));
 	addToCache($url_domains, $doc, "sid={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
@@ -40,6 +52,18 @@ function rpc_getDomains($xml, $result, $args) {
 			$actionsxml->appendChild($actionxml);
 		}
 		$domainxml->appendChild($actionsxml);
+
+		$domaininfo = $domain->find('ul.actions')->next('ul');
+		foreach($domaininfo->find('li') as $info) {
+			$info = pq($info);
+			$caption = $info->find('strong')->text();
+			$text = trim(preg_replace('|<strong>.+?</strong>|', '', $info->html()));
+			if(isset($onoffreplacement[$text]))
+				$text = $onoffreplacement[$text];
+			if(isset($infotypes[$caption]))
+				$domainxml->appendChild($xml->createElement($infotypes[$caption], $text));
+		}
+
 		$result->appendChild($domainxml);
 	}
 	return $result;
