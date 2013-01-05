@@ -4,8 +4,7 @@ function rpc_getFriendsOfProfile($xml, $result, $args) {
 	global $url_profile;
 	
 	$url = "{$url_profile}/{$args->user}";
-	$doc = phpQuery::newDocument(get_request_cookie($url, "sid={$args->sid}"));
-	addToCache($url, $doc, "sid={$args->sid}");
+	$doc = get_cached_cookie($url, "sid={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 	
@@ -15,7 +14,7 @@ function rpc_getFriendsOfProfile($xml, $result, $args) {
 		$friendxml = $xml->createElement('friend');
 		$name = $friend->find('a')->html();
 		$friendxml->appendChild($xml->createElement('name', $name));
-		$type = explode(", ", $friend->find('img')->attr('alt'));
+		$type = explode(', ', $friend->find('img')->attr('alt'));
 		$friendxml->appendChild($xml->createElement('type', $type[0]));
 		$result->appendChild($friendxml);
 	}

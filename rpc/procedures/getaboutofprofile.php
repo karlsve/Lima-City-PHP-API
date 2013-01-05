@@ -27,11 +27,11 @@ function rpc_getAboutOfProfile($xml, $result, $args) {
 			$boards = $xml->createElement('boards');
 			foreach($contentelement->find('ul li') as $board) {
 				$board = pq($board)->find('a');
-				$boardurl = substr($board->attr('href'), 8);
+				$boardurl = substr($board->attr('href'), 7);
 				$boardname = $board->html();
 				$boardxml = $xml->createElement('board');
-				$boardxml->appendChild($xml->createElement('url', $boardurl));
 				$boardxml->appendChild($xml->createElement('name', $boardname));
+				$boardxml->appendChild($xml->createElement('url', $boardurl));
 				$boards->appendChild($boardxml);
 			}
 			$elementxml->appendChild($boards);

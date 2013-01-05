@@ -4,8 +4,7 @@ function rpc_getGroupsOfProfile($xml, $result, $args) {
 	global $url_profile;
 	
 	$url = "{$url_profile}/{$args->user}";
-	$doc = phpQuery::newDocument(get_request_cookie($url, "sid={$args->sid}"));
-	addToCache($url, $doc, "sid={$args->sid}");
+	$doc = get_cached_cookie($url, "sid={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 	
@@ -15,11 +14,11 @@ function rpc_getGroupsOfProfile($xml, $result, $args) {
 		$groupxml = $xml->createElement('group');
 		$name = $group->find('a')->html();
 		$groupxml->appendChild($xml->createElement('name', $name));
-		$link = preg_replace("|/groups/|", "", $group->find("a")->attr('href'));
+		$link = substr($group->find('a')->attr('href'), 8);
 		$groupxml->appendChild($xml->createElement('link', $link));
 		$group->find('a')->remove();
-		$member = preg_replace("|\D|", "", $group->html());
-		$groupxml->appendChild($xml->createElement('member', $member));
+		$members = preg_replace('|\D|', '', $group->html());
+		$groupxml->appendChild($xml->createElement('members', $members));
 		$result->appendChild($groupxml);
 	}
 	return $result;
