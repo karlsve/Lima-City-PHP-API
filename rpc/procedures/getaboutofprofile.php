@@ -18,6 +18,7 @@ function rpc_getAboutOfProfile($xml, $result, $args) {
 		switch($name) {
 		case 'Messenger':
 			$elementxml = getMessenger($xml, $elementxml, $contentelement);
+			$type = 'messenger';
 			break;
 		case 'Über mich':
 			$elementxml->appendChild(parsePostContent($xml, trim($contentelement->html())));
