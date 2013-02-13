@@ -9,7 +9,7 @@ function lima_login($username, $password) {
 	$response = post_request_raw($url_login, $post);
 	$pattern_sid = '|Set-Cookie: sid=(.*?); path=/|i';
 	// 250835-tLEQpqK3Tp250835RIyPaSgevoWX4VN
-	$pattern_auth = '|Set-Cookie: session_auth_token=([-0-9a-zA-Z]*)|i';
+	$pattern_auth = '|Set-Cookie: auth_token_session=([-0-9a-zA-Z]*)|i';
 	if(!preg_match($pattern_sid, $response['header'], $match))
 		return false;
 
@@ -18,6 +18,14 @@ function lima_login($username, $password) {
 	$auth = false;
 	if(preg_match($pattern_auth, $response['header'], $match))
 		$auth = $match[1];
+
+	if(strpos($response['header'], 'Location: /login') !== false) {
+		$response = get_request_raw($url_login, "auth_token_session=$auth");
+		if(!preg_match($pattern_sid, $response['header'], $match))
+			return false;
+		$cookie = $match[1];
+	} else
+		return false;
 
 	$doc = phpQuery::newDocument($response['content']);
 	$isloggedin = false;
