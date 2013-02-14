@@ -21,8 +21,8 @@ function rpc_getDomains($xml, $result, $args) {
 		'aus'			=> 'off'
 	);
 
-	$doc = phpQuery::newDocument(get_request_cookie($url_domains, "sid={$args->sid}"));
-	addToCache($url_domains, $doc, "sid={$args->sid}");
+	$doc = phpQuery::newDocument(get_request_cookie($url_domains, "auth_token_session={$args->sid}"));
+	addToCache($url_domains, $doc, "auth_token_session={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 		

@@ -6,8 +6,8 @@ function rpc_getGuestbookOfProfile($xml, $result, $args) {
 	$page = isset($args->page) ? intVal($args->page) : 0;
 	$pagelink = "/page%3A$page/perpage%3A$perpage";
 	$url = "{$url_profile}/{$args->user}{$pagelink}";
-	$doc = phpQuery::newDocument(get_request_cookie($url, "sid={$args->sid}"));
-	addToCache($url, $doc, "sid={$args->sid}");
+	$doc = phpQuery::newDocument(get_request_cookie($url, "auth_token_session={$args->sid}"));
+	addToCache($url, $doc, "auth_token_session={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 

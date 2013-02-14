@@ -2,7 +2,7 @@
 
 function rpc_getUsername($xml, $result, $args) {
 	global $url_homepage;
-	$doc = get_cached_any_cookie($url_homepage, "sid={$args->cookie}");
+	$doc = get_cached_any_cookie($url_homepage, "auth_token_session={$args->sid}");
 	$username = false;
 	foreach($doc->find('h3.user') as $node) {
 		$username = $node->nodeValue;
@@ -13,10 +13,4 @@ function rpc_getUsername($xml, $result, $args) {
 	return $result;
 }
 
-xmlrpc_register_function(
-	'getUsername',
-	array(
-		'sid'
-	),
-	'rpc_getUsername'
-);
+xmlrpc_register_function('getUsername', array('sid'), 'rpc_getUsername');

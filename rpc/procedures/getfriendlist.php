@@ -2,8 +2,8 @@
 
 function rpc_getFriendListe($xml, $result, $args) {
 	global $url_homepage;
-	$doc = phpQuery::newDocument(get_request_cookie($url_homepage, "sid={$args->sid}"));
-	addToCache($url_homepage, $doc, "sid={$args->sid}");
+	$doc = phpQuery::newDocument(get_request_cookie($url_homepage, "auth_token_session={$args->sid}"));
+	addToCache($url_homepage, $doc, "auth_token_session={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 	$onlineelements = $doc->find('a:has(img[alt=Online])');

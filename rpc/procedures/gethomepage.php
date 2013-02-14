@@ -2,7 +2,7 @@
 
 function rpc_getHomepage($xml, $result, $args) {
 	global $url_homepage;
-	$homepage = get_request_cookie($url_homepage, "sid={$args->sid}");
+	$homepage = get_request_cookie($url_homepage, "auth_token_session={$args->sid}");
 	$doc = phpQuery::newDocument($homepage);
 	addToCache($url_homepage, $doc, "sid={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))

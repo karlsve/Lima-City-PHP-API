@@ -4,7 +4,7 @@ function rpc_getAboutOfProfile($xml, $result, $args) {
 	global $url_profile;
 	
 	$url = "{$url_profile}/{$args->user}";
-	$doc = get_cached_cookie($url, "sid={$args->sid}");
+	$doc = get_cached_cookie($url, "auth_token_session={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 	$elements = $doc->find('div#tabAbout dl dt');

@@ -5,10 +5,4 @@ function rpc_isLoggedin($xml, $result, $args) {
 	return $result;
 }
 
-xmlrpc_register_function(
-	'isLoggedin',
-	array(
-		'sid'
-	),
-	'rpc_isLoggedin'
-);
+xmlrpc_register_function('isLoggedin', array('sid'), 'rpc_isLoggedin');

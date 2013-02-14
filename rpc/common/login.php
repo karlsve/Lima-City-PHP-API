@@ -2,7 +2,7 @@
 
 function lima_loggedin($sid) {
 	global $url_homepage;
-	$doc = get_cached_any_cookie($url_homepage, "sid=$sid");
+	$doc = get_cached_any_cookie($url_homepage, "auth_token_session=$sid");
 	foreach($doc->find('a[href=/usercp]') as $logout)
 		return true;
 	return false;

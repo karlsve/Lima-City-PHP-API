@@ -2,7 +2,7 @@
 
 function rpc_reportSpam($xml, $result, $args) {
 	global $url_reportspam;
-	$raw = get_request_cookie("$url_reportspam/{$args->id}", "sid={$args->sid}");
+	$raw = get_request_cookie("$url_reportspam/{$args->id}", "auth_token_session={$args->sid}");
 	$doc = phpQuery::newDocument($raw);
 	if(strpos($raw, 'window.location.href = \'/login/goto:__board\';') !== false) {
 		$result->appendChild($xml->createElement('notloggedin'));
@@ -25,7 +25,7 @@ function rpc_reportSpam($xml, $result, $args) {
 	foreach($data as $name => $value)
 		$post .= '&' . urlencode($name) . '=' . urlencode($value);
 	$post = substr($post, 1);
-	$r = phpQuery::newDocument(post_request_cookie($url_reportspam, $post, "sid={$args->sid}", "$url_reportspam/{$args->id}"));
+	$r = phpQuery::newDocument(post_request_cookie($url_reportspam, $post, "auth_token_session={$args->sid}", "$url_reportspam/{$args->id}"));
 	$c = 'error';
 	if($r->find('html > head > title')->html() == 'Danke!')
 		$c = 'OK';

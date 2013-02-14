@@ -2,8 +2,8 @@
 
 function rpc_getMailboxes($xml, $result, $args) {
 	global $url_messages;
-	$doc = phpQuery::newDocument(get_request_cookie($url_messages, "sid={$args->sid}"));
-	addToCache($url_messages, $doc, "sid={$args->sid}");
+	$doc = phpQuery::newDocument(get_request_cookie($url_messages, "auth_token_session={$args->sid}"));
+	addToCache($url_messages, $doc, "auth_token_session={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 

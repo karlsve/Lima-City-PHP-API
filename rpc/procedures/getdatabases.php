@@ -3,8 +3,8 @@
 function rpc_getDatabases($xml, $result, $args) {
 	global $url_databases;
 
-	$doc = phpQuery::newDocument(get_request_cookie($url_databases, "sid={$args->sid}"));
-	addToCache($url_databases, $doc, "sid={$args->sid}");
+	$doc = phpQuery::newDocument(get_request_cookie($url_databases, "auth_token_session={$args->sid}"));
+	addToCache($url_databases, $doc, "auth_token_session={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 

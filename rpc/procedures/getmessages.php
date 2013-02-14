@@ -5,8 +5,8 @@ function rpc_getMessages($xml, $result, $args) {
 	$url = $url_messages;
 	if($args->mailbox != false)
 		$url .= "/box%3A{$args->mailbox}";
-	$doc = phpQuery::newDocument(get_request_cookie($url, "sid={$args->sid}"));
-	addToCache($url, $doc, "sid={$args->sid}");
+	$doc = phpQuery::newDocument(get_request_cookie($url, "auth_token_session={$args->sid}"));
+	addToCache($url, $doc, "auth_token_session={$args->sid}");
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 

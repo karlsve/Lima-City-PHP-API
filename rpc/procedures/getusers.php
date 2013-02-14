@@ -16,8 +16,8 @@ function rpc_getUsers($xml, $result, $args) {
 		}
 	}
 	$url = "$url_profiles$f";
-	$doc = phpQuery::newDocument(get_request_cookie($url, "sid={$args->sid}"));
-	addToCache($url, $doc, "sid={$args->sid}");
+	$doc = phpQuery::newDocument(get_request_cookie($url, "auth_token_session={$args->sid}"));
+	addToCache($url, $doc, "auth_token_session={$args->sid}");
 
 	$pages = 1;
 	$a = $doc->find('ol.pageNav li:last-child a');

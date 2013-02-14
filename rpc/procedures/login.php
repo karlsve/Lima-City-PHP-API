@@ -55,19 +55,11 @@ function rpc_login($xml, $result, $args) {
 	$result->appendChild($xml->createElement('loggedin', $output));
 	// session identifier
 	if($output == 'true') {
-		$result->appendChild($xml->createElement('session', $login->sid));
-		if($login->auth !== false)
-			$result->appendChild($xml->createElement('auth', $login->auth));
+		$result->appendChild($xml->createElement('session', $login->auth));
+		$result->appendChild($xml->createElement('auth', $login->sid));
 	} else
 		$result->appendChild($xml->createElement('error', $error));
 	return $result;
 }
 
-xmlrpc_register_function(
-	'login',
-	array(
-		'username',
-		'password'
-	),
-	'rpc_login'
-);
+xmlrpc_register_function('login', array('username', 'password'), 'rpc_login');
