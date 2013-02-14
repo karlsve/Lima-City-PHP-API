@@ -36,6 +36,17 @@ function rpc_getNotifications($xml, $result, $args) {
 		$n->appendChild($xml->createElement('count', $count));
 		$result->appendChild($n);
 	}
+	foreach($doc->find('div[id^="notice_"]:has(h3.important)') as $notification) {
+		$notification = pq($notification);
+		$title = $notification->find('h3.important')->html();
+		$date = trim(str_replace('ausblenden', '', $notification->find('> p > small')->text()));
+		$content = trim($notification->find(':nth-child(3)')->html());
+		$n = $xml->createElement('important');
+		$n->appendChild($xml->createElement('title', $title));
+		$n->appendChild($xml->createElement('date', $date));
+		$n->appendChild(parsePostContent($xml, $content));
+		$result->appendChild($n);
+	}
 	return $result;
 }
 
