@@ -3,6 +3,7 @@
 ini_set('display_errors', 'on');
 error_reporting(E_ALL ^ E_STRICT);
 
+$url_origin	= 'https://www.lima-city.de';
 $url_login	= 'https://www.lima-city.de/login';
 $url_logout	= 'https://www.lima-city.de/logout';
 $url_homepage	= 'https://www.lima-city.de/homepage';
@@ -20,6 +21,7 @@ $url_usersearch	= 'https://www.lima-city.de/ajax_usersearch';
 $url_domains	= 'https://www.lima-city.de/domains';
 $url_ftp	= 'https://www.lima-city.de/ftp';
 $url_databases	= 'https://www.lima-city.de/databases';
+$url_famous	= 'https://www.lima-city.de/famous';
 $url_status	= 'http://lima-status.de/';
 
 require_once('phpQuery/phpQuery.php');

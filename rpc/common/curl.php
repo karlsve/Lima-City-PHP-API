@@ -41,7 +41,7 @@ function get_request_cookie($url, $cookie) {
 	return($data);
 }
 
-function post_request_cookie($url, $data, $cookie, $referer = '') {
+function post_request_cookie($url, $data, $cookie, $referer = '', $headers = array("Expect: ")) {
 	$curl = curl_init($url);
 	curl_setopt($curl, CURLOPT_BINARYTRANSFER, true);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER , true);
@@ -49,7 +49,7 @@ function post_request_cookie($url, $data, $cookie, $referer = '') {
 	curl_setopt($curl, CURLOPT_HEADER, false);
 	curl_setopt($curl, CURLOPT_COOKIE, $cookie);
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($curl, CURLOPT_HTTPHEADER, array("Expect: "));
+	curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 	curl_setopt($curl, CURLOPT_POST, true);
 	curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 	if(!empty($referer))
