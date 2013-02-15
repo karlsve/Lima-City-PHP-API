@@ -19,13 +19,10 @@ function lima_login($username, $password) {
 	if(preg_match($pattern_auth, $response['header'], $match))
 		$auth = $match[1];
 
-	if(strpos($response['header'], 'Location: /login') !== false) {
-		$response = get_request_raw($url_login, "auth_token_session=$auth");
-		if(!preg_match($pattern_sid, $response['header'], $match))
-			return false;
-		$cookie = $match[1];
-	} else
+	$response = get_request_raw($url_login, "auth_token_session=$auth");
+	if(!preg_match($pattern_sid, $response['header'], $match))
 		return false;
+	$cookie = $match[1];
 
 	$doc = phpQuery::newDocument($response['content']);
 	$isloggedin = false;
