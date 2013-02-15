@@ -23,6 +23,12 @@ function rpc_getHomepage($xml, $result, $args) {
 	if(in_array('statistics', $config))
 		getStatistics($xml, $result, $doc);
 
+	if(in_array('visits', $config))
+		getLastVisits($xml, $result, $doc);
+
+	if(in_array('registrations', $config))
+		getRegistrations($xml, $result, $doc);
+
 	return $result;
 }
 
@@ -45,7 +51,7 @@ function getHomepageConfiguration($homepage) {
 	if(strpos($homepage, '<h3>Meine privaten Notizen</h3>') !== false)
 		$elements[] = 'notices';
 	if(strpos($homepage, '<h3 class="boxCaption">Neueste Anmeldungen</h3>') !== false)
-		$elements[] = 'lastregistrations';
+		$elements[] = 'registrations';
 	return($elements);
 }
 
@@ -134,7 +140,7 @@ function getHomepageThreads($xml, $result, $doc) {
 }
 
 function getFamous($xml, $result, $doc) {
-	$box = pq($doc->find('div ul.boxes:after(h3:has(a[href="/famous"]))')->get(0));
+	$box = $doc->find('h3:has(a[href="/famous"])')->next('ul.boxes:first-child-of-type');
 	$user = $box->find('li:nth-child(1)');
 	$group = $box->find('li:nth-child(2)');
 	$domain = $box->find('li:nth-child(3)');
@@ -185,7 +191,7 @@ function getFamous($xml, $result, $doc) {
 }
 
 function getStatistics($xml, $result, $doc) {
-	$box = pq($doc->find('ul.boxes.myStats:after(h3:contains("Meine Statistik"))')->get(0));
+	$box = $doc->find('h3:contains("Meine Statistik")')->next('ul.boxes.myStats:first-child-of-type');
 	$gulden_total = $box->find('li:nth-child(1) div.myStat')->text();
 	$gulden_today = $box->find('li:nth-child(2) div.myStat')->text();
 	$gulden_avail = $box->find('li:nth-child(3) div.myStat')->text();
@@ -211,6 +217,48 @@ function getStatistics($xml, $result, $doc) {
 	$c->appendChild($xml->createElement('guestbook-written', $count_gb_written));
 	$node->appendChild($c);
 	$result->appendChild($node);
+	return $result;
+}
+
+function getLastVisits($xml, $result, $doc) {
+	$box = $doc->find('h3.lastvisits:contains("Letzte Besucher meines Profils")')->next('ul.boxes:first-child-of-type');
+	$visits = $xml->createElement('last-visits');
+	foreach($box->find('li.lastViewer') as $viewer) {
+		$viewer = pq($viewer);
+		$name = $viewer->find('a')->html();
+		$stars = $viewer->find('img:not([alt="Avatar"])');
+		$time = $viewer->find('span small')->html();
+		$role = $stars->count() == 0 ? 'Benutzer' : getRole(pq($stars->get(0))->attr('alt'));
+		$node = $xml->createElement('user');
+		$node->appendChild($xml->createElement('name', $name));
+		$node->appendChild($xml->createElement('role', $role));
+		if(($stars->count() != 0) && ($role == 'Benutzer')) {
+			$info = getStars($stars);
+			$s = $xml->createElement('stars');
+			$s->appendChild($xml->createElement('count', $info->count));
+			$s->appendChild($xml->createElement('color', $info->type));
+			$node->appendChild($s);
+		}
+		$node->appendChild($xml->createElement('time', $time));
+		$visits->appendChild($node);
+	}
+	$result->appendChild($visits);
+	return $result;
+}
+
+function getRegistrations($xml, $result, $doc) {
+	$box = $doc->find('h3.boxCaption:contains("Neueste Anmeldungen")')->next('ul.boxes.lastRegisters:first-child-of-type');
+	$registrations = $xml->createElement('registrations');
+	foreach($box->find('li') as $user) {
+		$user = pq($user);
+		$name = $user->find('a')->html();
+		$date = $user->find('div')->html();
+		$node = $xml->createElement('user');
+		$node->appendChild($xml->createElement('name', $name));
+		$node->appendChild($xml->createElement('date', $date));
+		$registrations->appendChild($node);
+	}
+	$result->appendChild($registrations);
 	return $result;
 }
 
