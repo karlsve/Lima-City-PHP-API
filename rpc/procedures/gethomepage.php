@@ -20,6 +20,9 @@ function rpc_getHomepage($xml, $result, $args) {
 	if(in_array('famous', $config))
 		getFamous($xml, $result, $doc);
 
+	if(in_array('statistics', $config))
+		getStatistics($xml, $result, $doc);
+
 	return $result;
 }
 
@@ -34,7 +37,7 @@ function getHomepageConfiguration($homepage) {
 	if(strpos($homepage, '<h3>Ber&uuml;hmt f&uuml;r 15 Minuten <a href="/famous" title="Liste der Ber&uuml;hmten"><img src="images/layout/icons/table.png" alt="Liste der Ber&uuml;hmten" /></a></h3>') !== false)
 		$elements[] = 'famous';
 	if(strpos($homepage, '<h3>Meine Statistik</h3>') !== false)
-		$elements[] = 'statistic';
+		$elements[] = 'statistics';
 	if(strpos($homepage, '<h3 class="birthdays">Geburtstage</h3>') !== false)
 		$elements[] = 'birthdays';
 	if(strpos($homepage, '<h3>Freundehistory <a href="/feeds/friends-') !== false)
@@ -177,6 +180,36 @@ function getFamous($xml, $result, $doc) {
 	$domainnode->appendChild($xml->createElement('owner', $domainowner));
 	$node->appendChild($domainnode);
 
+	$result->appendChild($node);
+	return $result;
+}
+
+function getStatistics($xml, $result, $doc) {
+	$box = pq($doc->find('ul.boxes.myStats:after(h3:contains("Meine Statistik"))')->get(0));
+	$gulden_total = $box->find('li:nth-child(1) div.myStat')->text();
+	$gulden_today = $box->find('li:nth-child(2) div.myStat')->text();
+	$gulden_avail = $box->find('li:nth-child(3) div.myStat')->text();
+	$count_posts = $box->find('li:nth-child(4) div.myStat')->text();
+	$count_threads = $box->find('li:nth-child(5) div.myStat')->text();
+	$count_friends = $box->find('li:nth-child(6) div.myStat')->text();
+	$count_groups = $box->find('li:nth-child(7) div.myStat')->text();
+	$count_gb_received = $box->find('li:nth-child(8) div.myStat')->text();
+	$count_gb_written = $box->find('li:nth-child(9) div.myStat')->text();
+
+	$node = $xml->createElement('statistics');
+	$g = $xml->createElement('gulden');
+	$g->appendChild($xml->createElement('total', $gulden_total));
+	$g->appendChild($xml->createElement('today', $gulden_today));
+	$g->appendChild($xml->createElement('available', $gulden_avail));
+	$node->appendChild($g);
+	$c = $xml->createElement('counts');
+	$c->appendChild($xml->createElement('posts', $count_posts));
+	$c->appendChild($xml->createElement('threads', $count_threads));
+	$c->appendChild($xml->createElement('friends', $count_friends));
+	$c->appendChild($xml->createElement('groups', $count_groups));
+	$c->appendChild($xml->createElement('guestbook-received', $count_gb_received));
+	$c->appendChild($xml->createElement('guestbook-written', $count_gb_written));
+	$node->appendChild($c);
 	$result->appendChild($node);
 	return $result;
 }
