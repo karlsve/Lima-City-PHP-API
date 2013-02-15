@@ -14,19 +14,15 @@ function rpc_getFamous($xml, $result, $args) {
 		$user = pq($user);
 		$name = $user->find('a[rel="nofollow"]')->html();
 		$stars = $user->find('img');
-		$role = pq($stars->get(0))->attr('alt');
-		$role = substr($role, 0, strpos($role, ',') !== false ? strpos($role, ',') : strlen($role));
+		$role = getRole(pq($stars->get(0))->attr('alt'));
 		$node = $xml->createElement('user');
 		$node->appendChild($xml->createElement('name', $name));
 		$node->appendChild($xml->createElement('role', $role));
 		if($role == 'Benutzer') {
-			$starcount = $stars->count();
-			$type = pq($stars->get(0))->attr('src');
-			preg_match('|_([a-z]+)\.[a-z]+$|', $type, $match);
-			$type = $match[1];
+			$starinfo = getStars($stars);
 			$s = $xml->createElement('stars');
-			$s->appendChild($xml->createElement('count', $starcount));
-			$s->appendChild($xml->createElement('type', $type));
+			$s->appendChild($xml->createElement('count', $starinfo->count));
+			$s->appendChild($xml->createElement('color', $starinfo->type));
 			$node->appendChild($s);
 		}
 		$users->appendChild($node);
