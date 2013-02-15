@@ -8,23 +8,17 @@ function rpc_getHomepage($xml, $result, $args) {
 	if(!lima_checklogin($xml, $result, $args->sid))
 		return $result;
 	$config = getHomepageConfiguration($homepage);
-	$data = array(
-		'content'	=> $homepage,
-		'config'	=> $config,
-		'hasthreads'	=> false
-	);
 
 	$modules = $xml->createElement('modules');
 	foreach($config as $module)
 		$modules->appendChild($xml->createElement('module', $module));
 	$result->appendChild($modules);
 
-	if(
-	    (array_search('newest', $config) !== false)
-	    || (array_search('noreply', $config) !== false)) {
-		$data['hasthreads'] = true;
-		$data['threads'] = getHomepageThreads($xml, $result, $doc);
-	}
+	if(in_array('newest', $config) || in_array('noreply', $config))
+		getHomepageThreads($xml, $result, $doc);
+
+	if(in_array('famous', $config))
+		getFamous($xml, $result, $doc);
 
 	return $result;
 }
@@ -37,7 +31,7 @@ function getHomepageConfiguration($homepage) {
 		$elements[] = 'noreply';
 	if(strpos($homepage, '<h3 class="lastvisits">Letzte Besucher meines Profils</h3>') !== false)
 		$elements[] = 'visits';
-	if(strpos($homepage, '<h3>Ber&uuml;hmt f&uuml;r 15 Minuten</h3>') !== false)
+	if(strpos($homepage, '<h3>Ber&uuml;hmt f&uuml;r 15 Minuten <a href="/famous" title="Liste der Ber&uuml;hmten"><img src="images/layout/icons/table.png" alt="Liste der Ber&uuml;hmten" /></a></h3>') !== false)
 		$elements[] = 'famous';
 	if(strpos($homepage, '<h3>Meine Statistik</h3>') !== false)
 		$elements[] = 'statistic';
@@ -136,8 +130,55 @@ function getHomepageThreads($xml, $result, $doc) {
 	return $result;
 }
 
-xmlrpc_register_function(
-	'getHomepage',
-	array('sid'),
-	'rpc_getHomepage'
-);
+function getFamous($xml, $result, $doc) {
+	$box = pq($doc->find('div ul.boxes:after(h3:has(a[href="/famous"]))')->get(0));
+	$user = $box->find('li:nth-child(1)');
+	$group = $box->find('li:nth-child(2)');
+	$domain = $box->find('li:nth-child(3)');
+
+	$username = $user->find('a')->html();
+	$stars = $user->find('img:not(.profileViewer)');
+	$userrole = getRole(pq($stars->get(0))->attr('alt'));
+	if($userrole == 'Benutzer')
+		$userstars = getStars($stars);
+	$tokens = explode(' ', $user->find('span small'));
+	$gulden = $tokens[3];
+
+	$groupname = $group->find('a')->html();
+	$groupurl = substr($group->find('a')->attr('href'), 8);
+	$tokens = explode(' ', $group->find('span small'));
+	$groupmembers = $tokens[3];
+
+	$domainname = $domain->find('> a')->html();
+	$domainowner = $domain->find('span small a')->html();
+
+	$node = $xml->createElement('famous');
+
+	$usernode = $xml->createElement('user');
+	$usernode->appendChild($xml->createElement('name', $username));
+	$usernode->appendchild($xml->createElement('role', $userrole));
+	$usernode->appendChild($xml->createElement('gulden', $gulden));
+	if($userrole == 'Benutzer') {
+		$s = $xml->createElement('stars');
+		$s->appendChild($xml->createElement('count', $userstars->count));
+		$s->appendChild($xml->createElement('color', $userstars->type));
+		$usernode->appendChild($s);
+	}
+	$node->appendChild($usernode);
+
+	$groupnode = $xml->createElement('group');
+	$groupnode->appendChild($xml->createElement('name', $groupname));
+	$groupnode->appendChild($xml->createElement('url', $groupurl));
+	$groupnode->appendChild($xml->createElement('members', $groupmembers));
+	$node->appendChild($groupnode);
+
+	$domainnode = $xml->createElement('domain');
+	$domainnode->appendChild($xml->createElement('name', $domainname));
+	$domainnode->appendChild($xml->createElement('owner', $domainowner));
+	$node->appendChild($domainnode);
+
+	$result->appendChild($node);
+	return $result;
+}
+
+xmlrpc_register_function('getHomepage', array('sid'), 'rpc_getHomepage');
