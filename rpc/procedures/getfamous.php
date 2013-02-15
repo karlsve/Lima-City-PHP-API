@@ -32,6 +32,34 @@ function rpc_getFamous($xml, $result, $args) {
 		$users->appendChild($node);
 	}
 	$result->appendChild($users);
+
+	$groups = $xml->createElement('groups');
+	foreach($doc->find('#mainContent table tbody tr td:nth-child(2)') as $group) {
+		$group = pq($group);
+		$name = $group->find('a')->html();
+		$url = substr($group->find('a')->attr('href'), 8);
+		$tokens = explode(' ', $group->find('span small')->text());
+		$members = $tokens[3];
+		$node = $xml->createElement('group');
+		$node->appendChild($xml->createElement('name', $name));
+		$node->appendChild($xml->createElement('url', $url));
+		$node->appendChild($xml->createElement('members', $members));
+		$groups->appendChild($node);
+	}
+	$result->appendChild($groups);
+
+	$domains = $xml->createElement('domains');
+	foreach($doc->find('#mainContent table tbody tr td:nth-child(3)') as $domain) {
+		$domain = pq($domain);
+		$name = $domain->find('> a')->html();
+		$owner = $domain->find('span small a')->html();
+		$node = $xml->createElement('domain');
+		$node->appendChild($xml->createElement('domain', $name));
+		$node->appendChild($xml->createElement('owner', $owner));
+		$domains->appendChild($node);
+	}
+	$result->appendChild($domains);
+
 	return $result;
 }
 
