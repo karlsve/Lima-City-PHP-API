@@ -72,7 +72,7 @@ function getMessenger($xml, $result, $element) {
 			$messengerxml->appendChild($xml->createElement('icq', $link));
 		}
 		elseif(strpos($url, 'aim') !== false) {
-			$link =  preg_replace('!aim:GoIM\?screenname=!', '', $url);
+			$link =  preg_replace('!aim:goIM\?screenname=!', '', $url);
 			$messengerxml->appendChild($xml->createElement('aim', $link));
 		}
 		elseif(strpos($url, 'skype') !== false) {
