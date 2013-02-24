@@ -49,6 +49,15 @@ function rpc_getAboutOfProfile($xml, $result, $args) {
 		$elementxml->appendChild($typexml);
 		$result->appendChild($elementxml);
 	}
+	$element = $doc->find('div#avatarBox p.avatar img')->eq(0);
+	$content = $element->attr('src');
+	$typexml = $xml->createAttribute('type');
+	$typexml->appendChild($xml->createTextNode('avatar'));
+	$elementxml = $xml->createElement('element');
+	$elementxml->appendChild($xml->createElement('name', 'Avatar'));
+	$elementxml->appendChild($xml->createElement('src', $content));
+	$elementxml->appendChild($typexml);
+	$result->appendChild($elementxml);
 	return $result;
 }
 
