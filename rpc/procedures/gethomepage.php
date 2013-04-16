@@ -58,8 +58,8 @@ function getHomepageConfiguration($homepage) {
 function getHomepageThreads($xml, $result, $doc) {
 	foreach($doc->find('h3.lastposts') as $h3) {
 		$type = 'unknown';
-		switch(utf8_decode($h3->nodeValue)) {
-			case 'Neueste Beiträge':
+		switch(trim($h3->nodeValue)) {
+			case 'Neueste BeitrÃ¤ge':
 				$type = 'newest';
 				break;
 			case 'Neueste unbeantwortete Themen':
