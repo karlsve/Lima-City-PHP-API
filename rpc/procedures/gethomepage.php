@@ -34,23 +34,23 @@ function rpc_getHomepage($xml, $result, $args) {
 
 function getHomepageConfiguration($homepage) {
 	$elements = array();
-	if(strpos($homepage, '<h3 class="lastposts">Neueste Beitr&auml;ge</h3>') !== false)
+	if(strpos($homepage, '<h3 class="lastposts">Neueste Beitr&auml;ge <a href="/homepage/editor" title="Neu anordnen"><img src="images/layout/icons/arrow_out.png" alt="Neu anordnen" /></a></h3>') !== false)
 		$elements[] = 'newest';
-	if(strpos($homepage, '<h3 class="lastposts">Neueste unbeantwortete Themen</h3>') !== false)
+	if(strpos($homepage, '<h3 class="lastposts">Neueste unbeantwortete Themen <a href="/homepage/editor" title="Neu anordnen"><img src="images/layout/icons/arrow_out.png" alt="Neu anordnen" /></a></h3>') !== false)
 		$elements[] = 'noreply';
-	if(strpos($homepage, '<h3 class="lastvisits">Letzte Besucher meines Profils</h3>') !== false)
+	if(strpos($homepage, '<h3 class="lastvisits">Letzte Besucher meines Profils <a href="/homepage/editor" title="Neu anordnen"><img src="images/layout/icons/arrow_out.png" alt="Neu anordnen" /></a></h3>') !== false)
 		$elements[] = 'visits';
-	if(strpos($homepage, '<h3>Ber&uuml;hmt f&uuml;r 15 Minuten <a href="/famous" title="Liste der Ber&uuml;hmten"><img src="images/layout/icons/table.png" alt="Liste der Ber&uuml;hmten" /></a></h3>') !== false)
+	if(strpos($homepage, '<h3>Ber&uuml;hmt f&uuml;r 15 Minuten <a href="/famous" title="Liste der Ber&uuml;hmten"><img src="images/layout/icons/table.png" alt="Liste der Ber&uuml;hmten" /></a> <a href="/homepage/editor" title="Neu anordnen"><img src="images/layout/icons/arrow_out.png" alt="Neu anordnen" /></a></h3>') !== false)
 		$elements[] = 'famous';
-	if(strpos($homepage, '<h3>Meine Statistik</h3>') !== false)
+	if(strpos($homepage, '<h3>Meine Statistik <a href="/homepage/editor" title="Neu anordnen"><img src="images/layout/icons/arrow_out.png" alt="Neu anordnen" /></a></h3>') !== false)
 		$elements[] = 'statistics';
-	if(strpos($homepage, '<h3 class="birthdays">Geburtstage</h3>') !== false)
+	if(strpos($homepage, '<h3 class="birthdays">Geburtstage <a href="/homepage/editor" title="Neu anordnen"><img src="images/layout/icons/arrow_out.png" alt="Neu anordnen" /></a></h3>') !== false)
 		$elements[] = 'birthdays';
-	if(strpos($homepage, '<h3>Freundehistory <a href="/feeds/friends-') !== false)
+	if(strpos($homepage, '<h3>Aktionen meiner Freunde <a href="/feeds/friends-') !== false)
 		$elements[] = 'friendhistory';
-	if(strpos($homepage, '<h3>Meine privaten Notizen</h3>') !== false)
+	if(strpos($homepage, '<h3>Meine privaten Notizen <a href="/homepage/editor" title="Neu anordnen"><img src="images/layout/icons/arrow_out.png" alt="Neu anordnen" /></a></h3>') !== false)
 		$elements[] = 'notices';
-	if(strpos($homepage, '<h3 class="boxCaption">Neueste Anmeldungen</h3>') !== false)
+	if(strpos($homepage, '<h3 class="boxCaption">Neueste Anmeldungen <a href="/homepage/editor" title="Neu anordnen"><img src="images/layout/icons/arrow_out.png" alt="Neu anordnen" /></a></h3>') !== false)
 		$elements[] = 'registrations';
 	return($elements);
 }
