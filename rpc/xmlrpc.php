@@ -47,6 +47,7 @@ function xmlrpc_call($xml, $result, $name, $args) {
 function xmlrpc_directory($xml, $result) {
 	global $xmlrpc_functions;
 	ksort($xmlrpc_functions);
+	$result->appendChild($xml->createComment('github: https://github.com/karlsve/Lima-City-PHP-API/tree/xmlrpc'));
 	foreach($xmlrpc_functions as $name => $f) {
 		if($name == 'rpc_directory')
 			continue;
