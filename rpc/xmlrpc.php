@@ -48,6 +48,8 @@ function xmlrpc_directory($xml, $result) {
 	global $xmlrpc_functions;
 	ksort($xmlrpc_functions);
 	foreach($xmlrpc_functions as $name => $f) {
+		if($name == 'rpc_directory')
+			continue;
 		$procedure = $xml->createElement('procedure');
 		$procedure->appendChild($xml->createElement('name', $name));
 		$arguments = $xml->createElement('arguments');
