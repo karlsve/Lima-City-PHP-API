@@ -22,6 +22,7 @@ $url_domains	= 'https://www.lima-city.de/domains';
 $url_ftp	= 'https://www.lima-city.de/ftp';
 $url_databases	= 'https://www.lima-city.de/databases';
 $url_famous	= 'https://www.lima-city.de/famous';
+$url_usercp	= 'https://www.lima-city.de/usercp';
 $url_status	= 'http://lima-status.de/';
 
 require_once('phpQuery/phpQuery.php');
