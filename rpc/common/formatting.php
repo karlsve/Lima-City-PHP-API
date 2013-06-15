@@ -2,7 +2,7 @@
 
 function parseContent($xml, $doc) {
 	if($doc->nodeType == XML_TEXT_NODE)
-		return($xml->createElement('text', xml_format_content($doc->wholeText)));
+		return($xml->createElement('text', str_replace("\n", '', xml_format_content($doc->wholeText))));
 	if($doc->tagName == 'br')
 		return($xml->createElement('br'));
 	if($doc->tagName == 'a') {
