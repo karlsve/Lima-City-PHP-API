@@ -1,8 +1,14 @@
 <?php
 
 function parseContent($xml, $doc) {
-	if($doc->nodeType == XML_TEXT_NODE)
-		return($xml->createElement('text', str_replace("\n", '', xml_format_content($doc->wholeText))));
+	if($doc->nodeType == XML_TEXT_NODE) {
+		$text = xml_format_content($doc->wholeText);
+		if($text[0] == "\n")
+			$text = substr($text, 1);
+		if($text[strlen($text) - 1] == "\n")
+			$text = substr($text, 0, strlen($text) - 1);
+		return($xml->createElement('text', $text));
+	}
 	if($doc->tagName == 'br')
 		return($xml->createElement('br'));
 	if($doc->tagName == 'a') {
