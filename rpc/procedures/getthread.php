@@ -33,6 +33,12 @@ function rpc_getThread($xml, $result, $args) {
 	$name = htmlspecialchars($doc->find('h2')->get(0)->nodeValue);
 	$result->appendChild($xml->createElement('name', $name));
 
+	$forum = $doc->find('h3 > a[href^="/board/"]');
+	$forumxml = $xml->createElement('forum');
+	$forumxml->appendChild($xml->createElement('name', htmlspecialchars($forum->get(0)->nodeValue)));
+	$forumxml->appendChild($xml->createElement('url', htmlspecialchars(substr($forum->attr('href'), 7))));
+	$result->appendChild($forumxml);
+
 	$result->appendChild($xml->createElement('url', $args->url));
 
 	$postsxml = $xml->createElement('posts');
