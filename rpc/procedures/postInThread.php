@@ -18,7 +18,7 @@ function rpc_postInThread($xml, $result, $args) {
 		'id	'	=> $threadid,
 		'count'		=> '1'
 	);
-	$response = post_request_cookie("$url_origin/ajax_replyeditor", $requestdata, "sid=$sid");
+	$response = post_request_cookie("$url_origin/ajax_replyeditor", $requestdata, "auth_token_session={$args->sid}");
 	if($response > 0) {
 		// FIXXME:
 		// >> new posts cannot be recognized since the time and id is fetched shortly
