@@ -1,6 +1,8 @@
 Lima-City-PHP-API
 =================
 
+**Diese API ist nicht mehr aktuell und beinflusst die Views der Threads im Forum**
+
 The PHP-API-Script for Lima-City.de
 
 The official server these scripts are running on can be found at http://limaapi.dauerstoned-clan.de
